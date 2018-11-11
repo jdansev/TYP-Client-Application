@@ -15,10 +15,10 @@ class GroupUIManager {
     constructor() {
         var self: any = this;
 
-        self.group_container = $( '.group-container' );
+        self.group_container = $( '.groups__container' );
         self.message_input = $( '#message-input' );
-        self.menu_div = $( '.menu-div' );
-        self.dim = $( '.dim' );
+        self.menu_div = $( '.app__menu' );
+        self.dim = $( '.menu__dim' );
         self.group_item = $( '.group' );
 
         self.api_manager = new APIManager();
@@ -113,13 +113,13 @@ class GroupUIManager {
             group_element.data('id', group.id); // attach id to retrive associated data when clicked
 
             var group_title = $('<h1></h1>');
-            group_title.addClass('group-item');
-            group_title.addClass('group-name');
+            group_title.addClass('group__item');
+            group_title.addClass('group--name');
             group_title.html(group.name);
 
             var group_description = $('<p></p>');
-            group_description.addClass('group-item');
-            group_description.addClass('group-description');
+            group_description.addClass('group__item');
+            group_description.addClass('group--description');
             group_description.html(group.description);
 
             group_element.append(group_title);

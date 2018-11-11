@@ -39,7 +39,7 @@
     background: transparent;
 }
 
-.page-container {
+.app__container {
     width: 100%;
     height: 100vh;
     display: flex;
@@ -54,7 +54,7 @@ html, body {
     overflow: hidden;
 }
 
-.header-div {
+.app__top-bar {
     -webkit-app-region: drag;
     width: 100%;
     height: 50px;
@@ -70,7 +70,7 @@ html, body {
     
 }
 
-.message-box {
+.app__message-feed {
     width: 100%;
     box-sizing: border-box;
     overflow-y: scroll;
@@ -82,7 +82,7 @@ html, body {
     /* border: 1px solid red; */
 }
 
-.user-input-div {
+.app__message-input {
     padding: 12px 12px 12px 20px;
     display: flex;
     border-top: 1px solid #e3e3e3;
@@ -92,7 +92,7 @@ html, body {
     /* border: 1px solid red; */
 }
 
-.send-btn-div {
+.btn__send-wrapper {
     position: relative;
     width: 35px;
     height: 35px;
@@ -102,7 +102,7 @@ html, body {
     border-radius: 50%;
 }
 
-.send-btn {
+.btn__send {
     width: 100%;
     height: 100%;
     /* background-color: transparent; */
@@ -121,7 +121,7 @@ html, body {
     /* border: 1px solid red; */
 }
 
-/* .send-btn img {
+/* .btn__send img {
     height: 35px;
     width: 35px;
     position: absolute;
@@ -132,7 +132,7 @@ html, body {
     bottom: 0;
 } */
 
-.send-inner {
+.send__inner {
 
     width: 100%;
     height: 100%;

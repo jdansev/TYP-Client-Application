@@ -1,7 +1,7 @@
 /* hide scrollbars */
 ::-webkit-scrollbar { display: none; }
 
-.dim {
+.menu__dim {
     height:100%;
     width:100%;
     position:fixed;
@@ -13,7 +13,7 @@
     opacity: 0;
 }
 
-.menu-div {
+.app__menu {
     position: fixed;
     height: 100%;
     width: 300px;
@@ -27,7 +27,7 @@
     /*border: 1px solid red;*/
 }
 
-.menu-btn-div {
+.menu__btn {
     display: inline-block;
     height: 30px;
     width: 30px;
@@ -38,7 +38,7 @@
     /* border: 1px solid red; */
 }
 
-.menu-btn-div img {
+.menu__btn img {
     height: 18px;
     width: 28px;
     position: absolute;
@@ -51,20 +51,20 @@
     /* border: 1px solid green; */
 }
 
-.menu-btn-dark {
+.menu__btn--dark {
     clip: rect(0px,3px,20px,0px);
     -webkit-transition: clip 0.4s;
     transition: clip 0.4s;
 }
 
-.menu-btn-div:hover .menu-btn-dark {
+.menu__btn:hover .menu__btn--dark {
     clip: rect(0px,30px,20px,0px);
     -webkit-transition: clip 0.4s; /* Safari */
     transition: clip 0.4s;
 }
 
 
-.group-container {
+.groups__container {
     padding: 0;
     margin: 0;
     display: inline-block;
@@ -96,12 +96,12 @@
     box-shadow: 1px 1px 3px #e3e3e3;
 }
 
-.group-item {
+.group__item {
     font-family: Avenir;
     margin: 0px;
 }
 
-.group-name {
+.group--name {
     font-size: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -111,7 +111,7 @@
     /*border: 1px solid blue;*/
 }
 
-.group-description {
+.group--description {
     font-size: 12px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -121,7 +121,7 @@
     /*border: 1px solid green;*/
 }
 
-.group-title {
+.groups__title {
     width: 250px;
     font-family: Avenir;
     font-size: 14px;

@@ -4,16 +4,16 @@ class MessageUIManager {
 
     message_input: any;
     send_inner: any;
-    send_btn_div: any;
+    send_btn_wrapper: any;
 
     constructor() {
         var self: any = this;
 
         self.message_input = $( '#message-input' );
-        self.send_inner = $( '.send-inner' );
-        self.send_btn_div = $( '.send-btn-div' );
+        self.send_inner = $( '.send__inner' );
+        self.send_btn_wrapper = $( '.btn__send-wrapper' );
 
-        self.send_btn_div.hover(
+        self.send_btn_wrapper.hover(
             function() { // on hover
                 self.readyState();
             },
@@ -24,7 +24,7 @@ class MessageUIManager {
             }
         );
 
-        self.send_btn_div.click(function() {
+        self.send_btn_wrapper.click(function() {
             self.flyAnimation();
             messageHandler.sendMessage();
             self.clearInput();
@@ -72,11 +72,11 @@ class MessageUIManager {
         if (!(self.message_input.val())) return; // check that input is not empty
 
         // fly animation
-        $('.send-btn').stop().animate({
+        $('.btn__send').stop().animate({
             opacity: 0,
             top: "-=40px",
         }, 300, function() { // Animation complete.
-            $('.send-btn').css({
+            $('.btn__send').css({
                 opacity: '100',
                 top: '0',
             });

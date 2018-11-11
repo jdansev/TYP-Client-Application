@@ -1,0 +1,42 @@
+.color-picker.static {
+    display:inline-block;
+    position:static;
+}
+
+.color-picker.static .color-picker-container {
+    -webkit-box-shadow:none;
+    -moz-box-shadow:none;
+    box-shadow:none;
+}
+
+.tab__colour {
+    height: 400px;
+    width: 300px;
+    border: 1px solid #000;
+
+    text-align: center;
+}
+
+#picker-input {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+button {
+    margin: 5px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    border: 1px solid #000;
+    height: 50px;
+    width: 80px;
+    outline: none;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+h1 {
+    font-family: Avenir;
+}

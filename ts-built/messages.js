@@ -2,16 +2,16 @@ var MessageUIManager = /** @class */ (function () {
     function MessageUIManager() {
         var self = this;
         self.message_input = $('#message-input');
-        self.send_inner = $('.send-inner');
-        self.send_btn_div = $('.send-btn-div');
-        self.send_btn_div.hover(function () {
+        self.send_inner = $('.send__inner');
+        self.send_btn_wrapper = $('.btn__send-wrapper');
+        self.send_btn_wrapper.hover(function () {
             self.readyState();
         }, function () {
             if (!(self.message_input.val())) {
                 self.defaultState(100);
             }
         });
-        self.send_btn_div.click(function () {
+        self.send_btn_wrapper.click(function () {
             self.flyAnimation();
             messageHandler.sendMessage();
             self.clearInput();
@@ -50,11 +50,11 @@ var MessageUIManager = /** @class */ (function () {
         if (!(self.message_input.val()))
             return; // check that input is not empty
         // fly animation
-        $('.send-btn').stop().animate({
+        $('.btn__send').stop().animate({
             opacity: 0,
             top: "-=40px",
         }, 300, function () {
-            $('.send-btn').css({
+            $('.btn__send').css({
                 opacity: '100',
                 top: '0',
             });

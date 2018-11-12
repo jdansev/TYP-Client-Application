@@ -2,8 +2,8 @@ var ColorFade = /** @class */ (function () {
     function ColorFade(theme_colors) {
         var self = this;
         self.gradient_factory = new GradientFactory();
-        self.container = $('.container');
-        self.scroll_container = $('.scroll-container');
+        self.container = $('.messages__container');
+        self.scroll_container = $('.scroll__container');
         self.container_height = self.container.outerHeight();
         self.theme_colors = theme_colors;
         self.gradient_list = self.gradient_factory.generate({
@@ -28,7 +28,7 @@ var ColorFade = /** @class */ (function () {
     };
     ColorFade.prototype.refreshGradients = function () {
         var self = this;
-        var scrollTop = document.getElementsByClassName('scroll-container')[0].scrollTop;
+        var scrollTop = document.getElementsByClassName('scroll__container')[0].scrollTop;
         var message_list = document.getElementsByClassName('message');
         // optimized for speed using javascript, no jquery
         for (var i = 0; i < message_list.length; i++) {

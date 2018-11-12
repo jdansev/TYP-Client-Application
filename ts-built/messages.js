@@ -84,7 +84,7 @@ var MessageHandler = /** @class */ (function () {
     function MessageHandler() {
         var self = this;
         this.message_input = $('#message-input');
-        this.container = $('.container');
+        this.container = $('.messages__container');
         this.socket = null;
         this.api_manager = new APIManager();
         self.bindEnterKeyPress();

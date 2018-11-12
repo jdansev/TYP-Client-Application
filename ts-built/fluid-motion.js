@@ -33,9 +33,9 @@ var Direction;
 var FluidMotion = /** @class */ (function () {
     function FluidMotion(direction) {
         var self = this;
-        self.target_container = $('.container');
-        self.scroll_view = $('.scroll-view');
-        self.scroll_container = $('.scroll-container');
+        self.target_container = $('.messages__container');
+        self.scroll_view = $('.scroll__view');
+        self.scroll_container = $('.scroll__container');
         self.fluid_motion_elements = [];
         self.direction = direction;
         self.scroll_container.on({

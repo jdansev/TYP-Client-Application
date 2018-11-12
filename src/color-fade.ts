@@ -12,8 +12,8 @@ class ColorFade {
     constructor(theme_colors: Array<string>) {
         var self: any = this;
         self.gradient_factory = new GradientFactory();
-        self.container = $( '.container' );
-        self.scroll_container = $( '.scroll-container' );
+        self.container = $( '.messages__container' );
+        self.scroll_container = $( '.scroll__container' );
         self.container_height = self.container.outerHeight();
         self.theme_colors = theme_colors;
         self.gradient_list = self.gradient_factory.generate({
@@ -41,7 +41,7 @@ class ColorFade {
     public refreshGradients() {
 
         var self: any = this;
-        var scrollTop: number = document.getElementsByClassName('scroll-container')[0].scrollTop;
+        var scrollTop: number = document.getElementsByClassName('scroll__container')[0].scrollTop;
         var message_list: any = document.getElementsByClassName('message');
 
         // optimized for speed using javascript, no jquery

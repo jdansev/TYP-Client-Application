@@ -18,3 +18,8 @@
 
     transition: 0s all;
 }
+
+.list__item:active {
+    transform: scale(.95);
+    transition: 0.1s transform;
+}

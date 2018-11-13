@@ -59,7 +59,41 @@
 }
 
 #tab__content h2,
-  #tab__content h3,
-  #tab__content p {
+#tab__content h3,
+#tab__content p {
     margin: 0 0 15px 0;
+}
+
+.item--name {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.item--tag {
+    width: 45px;
+    height: 20px;
+    line-height: 20px;
+
+    font-size: 12px;
+    text-align: center;
+
+    color: #16a085;
+    border: 1px solid #16a085;
+    border-radius: 3px;
+
+    float: right;
+}
+
+.tag--public {
+    color: #16a085;
+    border: 1px solid #16a085;
+}
+
+.tag--private {
+    color: #c0392b;
+    border: 1px solid #c0392b;
+}
+
+.tag--secret {
+    color: #7f8c8d;
+    border: 1px solid #7f8c8d;
 }

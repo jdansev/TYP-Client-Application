@@ -37,18 +37,58 @@ var TabManager = /** @class */ (function () {
         // reset id's
         $("#tabs a").attr("id", "");
     };
+    TabManager.prototype.emptyFriendList = function () {
+        $("#list__friends").empty();
+    };
+    TabManager.prototype.addItemToFriendList = function (username) {
+        var f = $('<div/>');
+        f.addClass('list__item');
+        f.appendTo('#list__friends');
+        f.on('click', function () {
+            console.log('friend clicked');
+        });
+        var name = $('<span/>');
+        name.addClass('item--name');
+        name.append(username);
+        name.appendTo(f);
+    };
     TabManager.prototype.emptyHubList = function () {
         $("#list__hubs").empty();
     };
     TabManager.prototype.addItemToHubList = function (id, vis) {
+        /* Structure:
+        <div class="list__item">
+            <span class="item--name"> NAME </span>
+            <span class="item--tag"> VISIBILITY </span>
+        </div>
+        */
         var h = $('<div/>');
         h.addClass('list__item');
-        h.append(id + " (" + vis + ")");
-        h.data("id", id);
-        h.appendTo('#list__hubs');
         h.on('click', function () {
             goManager.joinHub(id);
+            groupUIManager.hideMenu();
         });
+        var name = $('<span/>');
+        name.addClass('item--name');
+        name.append(id);
+        name.appendTo(h);
+        var tag = $('<span/>');
+        tag.addClass('item--tag');
+        tag.append(vis);
+        tag.appendTo(h);
+        switch (vis) {
+            case "public":
+                tag.addClass('tag--public');
+                break;
+            case "private":
+                tag.addClass('tag--private');
+                break;
+            case "secret":
+                tag.addClass('tag--secret');
+                break;
+            default:
+        }
+        h.appendTo('#list__hubs');
     };
     return TabManager;
 }());

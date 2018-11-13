@@ -24,6 +24,7 @@ var GoManager = /** @class */ (function () {
                     my_id = data.id;
                     self.createHub();
                     self.loadHubs();
+                    self.loadFriends();
                 }
             },
             error: function (data, textStatus, xhr) {
@@ -132,6 +133,7 @@ var GoManager = /** @class */ (function () {
             }));
         });
     };
+    // Load Hubs
     GoManager.prototype.loadHubs = function () {
         var self = this;
         $.ajax({
@@ -146,6 +148,29 @@ var GoManager = /** @class */ (function () {
                     tabManager.emptyHubList();
                     for (var hub in json) {
                         tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
+                    }
+                }
+            },
+            error: function (data, textStatus, xhr) {
+                console.log(data.responseText);
+            }
+        });
+    };
+    // Load Friends
+    GoManager.prototype.loadFriends = function () {
+        var self = this;
+        $.ajax({
+            type: 'GET',
+            url: "http://localhost:1212/my-friends?token=" + my_token,
+            success: function (data, textStatus, xhr) {
+                if (xhr.status != 200) {
+                    console.log(data.responseText);
+                }
+                else {
+                    var json = JSON.parse(data);
+                    tabManager.emptyFriendList();
+                    for (var hub in json) {
+                        tabManager.addItemToFriendList(json[hub].Username);
                     }
                 }
             },

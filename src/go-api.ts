@@ -48,6 +48,7 @@ class GoManager {
                     self.createHub();
 
                     self.loadHubs();
+                    self.loadFriends();
 
                 }
             },
@@ -139,6 +140,7 @@ class GoManager {
         this.ws = new WebSocket("ws://localhost:1212/ws?token=" + this.token + "&hub=" + hub_id);
 
         self.waitForSocketConnection(this.ws, function() {
+
             console.log("Connected.");
 
             self.ws.onmessage = function (evt) {
@@ -147,16 +149,13 @@ class GoManager {
                 if (messages.length > 0) {
                     var msg = JSON.parse(messages[0]);
                     console.log(msg);
-
                     messageHandler.send(msg);
-
                 } else {
                     console.log("error parsing message!");
                 }
             };
-
         });
-
+        
     }
 
     private waitForSocketConnection(socket, callback){
@@ -193,13 +192,12 @@ class GoManager {
 
     }
 
-
+    // Load Hubs
     public loadHubs() {
         var self: any = this;
-
         $.ajax({
             type: 'GET',
-            url: "http://localhost:1212/my-hubs?token="+my_token,
+            url: "http://localhost:1212/my-hubs?token=" + my_token,
             success: function(data, textStatus, xhr) {
                 if (xhr.status != 200) {
                     console.log(data.responseText);
@@ -215,7 +213,29 @@ class GoManager {
                 console.log(data.responseText);
             }
         });
+    }
 
+    // Load Friends
+    public loadFriends() {
+        var self: any = this;
+        $.ajax({
+            type: 'GET',
+            url: "http://localhost:1212/my-friends?token=" + my_token,
+            success: function(data, textStatus, xhr) {
+                if (xhr.status != 200) {
+                    console.log(data.responseText);
+                } else {
+                    var json = JSON.parse(data);
+                    tabManager.emptyFriendList();
+                    for (var hub in json) {
+                        tabManager.addItemToFriendList(json[hub].Username);
+                    }
+                }
+            },
+            error: function(data, textStatus, xhr) {
+                console.log(data.responseText);
+            }
+        });
     }
 
 }

@@ -12,6 +12,7 @@
 	<!-- Stylesheets -->
 	<link rel="stylesheet" href="styles/app.css">
 	<link rel="stylesheet" href="styles/tabs.css">
+	<link rel="stylesheet" href="styles/tab-list.css">
 
 	<style>
 
@@ -43,12 +44,37 @@
 		<div id="tab__content">
 			<div id="tab__people">
 				<h2>Your Friends</h2>
+
+				<div id="list__friends" class="tab__list">
+
+					<div class="list__item">John</div>
+
+					<div class="list__item">Peter</div>
+
+					<div class="list__item">David</div>
+
+				</div>
+				
 			</div>
 			<div id="tab__hubs">
 				<h2>Your Hubs</h2>
+
+				<div id="list__hubs" class="tab__list">
+
+					<div class="list__item">My Private Hub</div>
+					
+				</div>
+
 			</div>
 			<div id="tab__notifications">
 				<h2>Notifications</h2>
+
+				<div id="list__notifications" class="tab__list">
+
+					<div class="list__item">John accepted your friend request</div>
+					
+				</div>
+
 			</div>
 		</div>
 
@@ -101,6 +127,7 @@
 	<script src="ts-built/gradient-factory.js"></script>
 	<script src="ts-built/groups.js"></script>
 	<script src="ts-built/messages.js"></script>
+	<script src="ts-built/tabs.js"></script>
 	
 </body>
 </html>

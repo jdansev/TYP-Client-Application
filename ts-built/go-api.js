@@ -23,6 +23,7 @@ var GoManager = /** @class */ (function () {
                     my_token = data.token;
                     my_id = data.id;
                     self.createHub();
+                    self.loadHubs();
                 }
             },
             error: function (data, textStatus, xhr) {
@@ -129,6 +130,28 @@ var GoManager = /** @class */ (function () {
                 username: self.username,
                 Message: msg
             }));
+        });
+    };
+    GoManager.prototype.loadHubs = function () {
+        var self = this;
+        $.ajax({
+            type: 'GET',
+            url: "http://localhost:1212/my-hubs?token=" + my_token,
+            success: function (data, textStatus, xhr) {
+                if (xhr.status != 200) {
+                    console.log(data.responseText);
+                }
+                else {
+                    var json = JSON.parse(data);
+                    tabManager.emptyHubList();
+                    for (var hub in json) {
+                        tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
+                    }
+                }
+            },
+            error: function (data, textStatus, xhr) {
+                console.log(data.responseText);
+            }
         });
     };
     return GoManager;

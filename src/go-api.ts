@@ -47,6 +47,8 @@ class GoManager {
 
                     self.createHub();
 
+                    self.loadHubs();
+
                 }
             },
             error: function(data, textStatus, xhr) {
@@ -130,7 +132,6 @@ class GoManager {
     }
 
     public joinHub(hub_id) {
-
         var self: any = this;
 
         if (this.ws != null) this.ws.close();
@@ -173,8 +174,8 @@ class GoManager {
         5); // wait 5 miliseconds
     }
 
-    public sendMessage(msg){
 
+    public sendMessage(msg){
         var self: any = this;
 
         if (self.ws == null) {
@@ -188,6 +189,31 @@ class GoManager {
                 username: self.username,
                 Message: msg
             }));
+        });
+
+    }
+
+
+    public loadHubs() {
+        var self: any = this;
+
+        $.ajax({
+            type: 'GET',
+            url: "http://localhost:1212/my-hubs?token="+my_token,
+            success: function(data, textStatus, xhr) {
+                if (xhr.status != 200) {
+                    console.log(data.responseText);
+                } else {
+                    var json = JSON.parse(data);
+                    tabManager.emptyHubList();
+                    for (var hub in json) {
+                        tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
+                    }
+                }
+            },
+            error: function(data, textStatus, xhr) {
+                console.log(data.responseText);
+            }
         });
 
     }

@@ -233,6 +233,9 @@ input:-ms-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; fo
 
     border: none;
     background-color: #eee;
+
+    background-image: url(data:image/gif;base64,R0lGODlhCAAIAJEAAMzMzP///////wAAACH5BAEHAAIALAAAAAAIAAgAAAINhG4nudroGJBRsYcxKAA7);
+
     right: -400px;
     
     padding: 10px;

@@ -1,0 +1,20 @@
+
+
+.list__item {
+    border-radius: 4px;
+    background-color: white;
+    opacity: .7;
+    padding: 10px;
+    height: 25px;
+    line-height: 25px;
+    margin-bottom: 10px;
+
+    transition: 0.05s all;
+}
+
+.list__item:hover {
+    cursor: pointer;
+    opacity: 1;
+
+    transition: 0s all;
+}

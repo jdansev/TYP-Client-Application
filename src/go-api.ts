@@ -143,6 +143,8 @@ class GoManager {
 
             console.log("Connected.");
 
+            self.loadHubMessages(hub_id);
+
             self.ws.onmessage = function (evt) {
 
                 var messages = evt.data.split('\n');
@@ -155,7 +157,7 @@ class GoManager {
                 }
             };
         });
-        
+
     }
 
     private waitForSocketConnection(socket, callback){
@@ -207,6 +209,44 @@ class GoManager {
                     for (var hub in json) {
                         tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
                     }
+                }
+            },
+            error: function(data, textStatus, xhr) {
+                console.log(data.responseText);
+            }
+        });
+    }
+
+    // Load Hub Messages
+    loadHubMessages(hub_id) {
+        var self: any = this;
+        $.ajax({
+            type: 'GET',
+            url: "http://localhost:1212/hub-messages/" + hub_id + "?token=" + my_token,
+            success: function(data, textStatus, xhr) {
+                if (xhr.status != 200) {
+                    console.log(data.responseText);
+                } else {
+
+                    messageManager.clearMessages();
+                    messageHandler.clearMessages();
+
+                    var json = JSON.parse(data);
+
+                    // save messages
+                    for (var m in json) {
+                        var message = json[m];
+                        var new_message: Message = {
+                            message: message.Message,
+                            sender_username: message.Username,
+                            sender_id: message.ID,
+                            sender_token: "",
+                        }
+                        messageManager.addMessage(new_message);
+                    }
+
+                    // load them into the ui
+                    fluidMotion.loadFluidMotionElementsFromArray(messageManager.getAllMessages());
                 }
             },
             error: function(data, textStatus, xhr) {

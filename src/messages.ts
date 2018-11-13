@@ -219,7 +219,7 @@ class MessageHandler {
         this.api_manager.makeAPICall(api_url, this.loadMessages, this);
     }
 
-    private clearMessages() {
+    public clearMessages() {
         this.container.html('');
     }
 

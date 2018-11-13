@@ -49,10 +49,10 @@ window.onload = function() {
     groupUIManager = new GroupUIManager();
     
     colorFade = new ColorFade(
-        // themePalette['endless river'],
+        themePalette['endless river'],
         // themePalette['redish yellow'],
         // themePalette['vivid'],
-        themePalette['ibiza sunset'],
+        // themePalette['ibiza sunset'],
         // themePalette['ocean'],
         // themePalette['purplish red'],
 

@@ -63,6 +63,42 @@ window.onload = function() {
 
     goManager = new GoManager();
     goManager.register('asdf','asdf');
+
+
+
+
+    function resetTabs(){
+        $("#tab__content > div").hide(); //Hide all content
+        $("#tabs a").attr("id",""); //Reset id's
+    }
+
+    var myUrl = window.location.href;
+    var myUrlTab = myUrl.substring(myUrl.indexOf("#"));
+    var myUrlTabName = myUrlTab.substring(0,4);
+
+        $("#tab__content > div").hide();
+        $("#tabs li:first a").attr("id","current");
+        $("#tab__content > div:first").fadeIn();
+        
+        $("#tabs a").on("click",function(e) {
+            e.preventDefault();
+            if ($(this).attr("id") == "current"){
+             return       
+            }
+            else{             
+            resetTabs();
+            $(this).attr("id","current");
+            $($(this).attr('name')).fadeIn();
+            }
+        });
+
+        for (var i = 1; i <= $("#tabs li").length; i++) {
+          if (myUrlTab == myUrlTabName + i) {
+              resetTabs();
+              $("a[name='"+myUrlTab+"']").attr("id","current");
+              $(myUrlTab).fadeIn();
+          }
+        }
     
 
 }

@@ -11,6 +11,11 @@
 
 	<!-- Stylesheets -->
 	<link rel="stylesheet" href="styles/app.css">
+	<link rel="stylesheet" href="styles/tabs.css">
+
+	<style>
+
+	</style>
 
 </head>
 
@@ -18,18 +23,37 @@
 
 	<div class="app__menu">
 
-		<div class="groups__title"><b>Chat Boxes</b></div>
+		<!-- <div class="groups__title"><b>Chat Boxes</b></div>
 		<div class="groups__container">
 
-			<!-- Demo group -->
 			<div class='group' data-id='34' data-token='jau7ejfoe1uehdo'>
 				<h1 class='group__item group--name'>My Chat</h1>
 				<p class='group__item group--description'>A chat for testing purposes</p>
 			</div>
 
+		</div> -->
+
+
+		<ul id="tabs">
+			<li><a href="#" name="#tab__people">People</a></li>
+			<li><a href="#" name="#tab__hubs">Hubs</a></li>
+			<li><a href="#" name="#tab__notifications">Notifications</a></li>
+		</ul>
+
+		<div id="tab__content">
+			<div id="tab__people">
+				<h2>Your Friends</h2>
+			</div>
+			<div id="tab__hubs">
+				<h2>Your Hubs</h2>
+			</div>
+			<div id="tab__notifications">
+				<h2>Notifications</h2>
+			</div>
 		</div>
 
 	</div>
+
 
 	<div class="menu__dim"></div>
 

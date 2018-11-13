@@ -63,6 +63,7 @@ html, body {
     bottom: 0;
 }
 
+
 /* Message Feed */
 
 .app__message-feed {
@@ -96,7 +97,6 @@ html, body {
     width: 100%;
     z-index: 1;
 }
-
 
 
 /* Messages */
@@ -137,16 +137,12 @@ html, body {
 }
 
 
-
 /* Message Input */
-
 
 input::-webkit-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; font-size: 16px; letter-spacing: 0.6px; }
 input:-moz-placeholder { color: #e3e3e3 !important; font-family: Avenir; font-size: 16px; letter-spacing: 0.6px;}
 input::-moz-placeholder { color: #e3e3e3 !important; font-family: Avenir; font-size: 16px; letter-spacing: 0.6px;}
 input:-ms-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; font-size: 16px; letter-spacing: 0.6px;}
-
-
 
 .app__message-input {
     display: flex;
@@ -171,7 +167,6 @@ input:-ms-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; fo
 
 
 /* Send Button */
-
 
 .btn__send-wrapper {
     width: 35px;
@@ -212,9 +207,6 @@ input:-ms-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; fo
 
 /* Menu */
 
-/* hide scrollbars */
-::-webkit-scrollbar { display: none; }
-
 .menu__dim {
     position: fixed;
     display: none;
@@ -235,12 +227,12 @@ input:-ms-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; fo
     position: fixed;
 
     height: 100%;
-    width: 300px;
+    width: 350px;
 
     z-index: 2 !important;
 
     border: none;
-    background-color: white;
+    background-color: #eee;
     right: -400px;
     
     padding: 10px;
@@ -352,3 +344,6 @@ input:-ms-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; fo
     width: 250px;
     padding: 2px;
 }
+
+/* hides scrollbars */
+::-webkit-scrollbar { display: none; }

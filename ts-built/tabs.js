@@ -13,6 +13,9 @@ var TabManager = /** @class */ (function () {
         // show the first tab contents
         $("#tab__content > div:first").fadeIn();
         $("#tabs a").on("click", function (e) {
+            if ($(this).attr('name') == '#tab__hubs') {
+                goManager.loadHubs();
+            }
             // identify the current tab
             if ($(this).attr("id") == "current") {
                 return;
@@ -64,6 +67,7 @@ var TabManager = /** @class */ (function () {
         */
         var h = $('<div/>');
         h.addClass('list__item');
+        h.addClass('list__item--hub');
         h.on('click', function () {
             goManager.joinHub(id);
             groupUIManager.hideMenu();

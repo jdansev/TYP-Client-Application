@@ -1,6 +1,4 @@
 
-
-
 var my_id;
 var my_token;
 
@@ -49,13 +47,12 @@ window.onload = function() {
     groupUIManager = new GroupUIManager();
     
     colorFade = new ColorFade(
-        themePalette['endless river'],
+        // themePalette['endless river'],
         // themePalette['redish yellow'],
         // themePalette['vivid'],
         // themePalette['ibiza sunset'],
-        // themePalette['ocean'],
+        themePalette['ocean'],
         // themePalette['purplish red'],
-
         // themePalette['redgray'],
         // themePalette['quepal'],
     );

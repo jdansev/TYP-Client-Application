@@ -19,7 +19,7 @@
     transition: 0s all;
 }
 
-.list__item:active {
+.list__item--hub:active {
     transform: scale(.95);
     transition: 0.1s transform;
 }

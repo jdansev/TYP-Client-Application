@@ -31,7 +31,12 @@ window.onload = function () {
     messageUIManager = new MessageUIManager();
     groupManager = new GroupManager();
     groupUIManager = new GroupUIManager();
-    colorFade = new ColorFade(themePalette['endless river']);
+    colorFade = new ColorFade(
+    // themePalette['endless river'],
+    // themePalette['redish yellow'],
+    // themePalette['vivid'],
+    // themePalette['ibiza sunset'],
+    themePalette['ocean']);
     fluidMotion = new FluidMotion(Direction.Reversed);
     goManager = new GoManager();
     goManager.register('asdf', 'asdf');

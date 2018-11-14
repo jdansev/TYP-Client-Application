@@ -61,6 +61,7 @@ window.onload = function() {
 
 
     goManager = new GoManager();
+    goManager.initialise();
     goManager.register('asdf','asdf');
 
     tabManager = new TabManager();

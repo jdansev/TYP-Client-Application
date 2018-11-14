@@ -14,7 +14,7 @@ var TabManager = /** @class */ (function () {
         $("#tab__content > div:first").fadeIn();
         $("#tabs a").on("click", function (e) {
             if ($(this).attr('name') == '#tab__hubs') {
-                goManager.loadHubs();
+                self.resetHubTab();
             }
             // identify the current tab
             if ($(this).attr("id") == "current") {
@@ -33,6 +33,11 @@ var TabManager = /** @class */ (function () {
                 $(myUrlTab).fadeIn();
             }
         }
+    };
+    TabManager.prototype.resetHubTab = function () {
+        $('#hubs__title').text('Your Hubs');
+        $("#hub-search").val('');
+        goManager.loadHubs();
     };
     TabManager.prototype.resetTabs = function () {
         // hide all tab content

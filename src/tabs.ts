@@ -22,7 +22,7 @@ class TabManager {
         $("#tabs a").on("click",function(e) {
 
             if ($(this).attr('name') == '#tab__hubs') {
-                goManager.loadHubs();
+                self.resetHubTab();
             }
     
             // identify the current tab
@@ -45,6 +45,12 @@ class TabManager {
             }
         }
 
+    }
+
+    public resetHubTab() {
+        $('#hubs__title').text('Your Hubs');
+        $("#hub-search").val('');
+        goManager.loadHubs();
     }
 
     private resetTabs(){

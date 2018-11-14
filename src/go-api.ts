@@ -4,6 +4,7 @@
 class GoManager {
 
     ws: any;
+    hubSearchWS: any;
 
     username: string;
     id: string;
@@ -13,6 +14,28 @@ class GoManager {
 
     constructor() {
         this.api_manager = new APIManager();
+    }
+
+    public initialise() {
+        var self: any = this;
+
+        $("#hub-search").keyup(function(e) {
+
+            if ($('#hub-search').val() == '') {
+                tabManager.resetHubTab();
+                return;
+            }
+
+            if (self.hubSearchWS == null || self.hubSearchWS.readyState != self.hubSearchWS.OPEN) {
+                console.log('you are not connected.');
+                self.connectHubSearchWebsocket();
+            }
+
+            self.waitForSocketConnection(self.hubSearchWS, function() {
+                self.hubSearchWS.send($('#hub-search').val());
+            });
+
+        });
     }
 
     public setup(u, p) {
@@ -194,6 +217,45 @@ class GoManager {
 
     }
 
+
+    // Hub Search Websocket
+
+    public connectHubSearchWebsocket() {
+        var self: any = this;
+
+        self.hubSearchWS = new WebSocket("ws://localhost:1212/ws/find-hubs");
+        self.waitForSocketConnection(self.hubSearchWS, function() {
+            console.log("Connected to hub search websocket.");
+
+
+
+            self.hubSearchWS.onmessage = function (evt) {
+
+                $('#hubs__title').text('Search Results');
+
+                var results = evt.data.split('\n');
+
+                if (results.length > 0) {
+
+                    var json = JSON.parse(results[0]);
+
+                    console.log(json);
+
+                    tabManager.emptyHubList();
+                    var hubs = Array<any>();
+                    for (var hub in json) {
+                        tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
+                    }
+
+                } else {
+                    console.log("error parsing message!");
+                }
+            };
+        });
+
+    }
+
+
     // Load Hubs
     public loadHubs() {
         var self: any = this;
@@ -227,7 +289,6 @@ class GoManager {
                 if (xhr.status != 200) {
                     console.log(data.responseText);
                 } else {
-
                     messageManager.clearMessages();
                     messageHandler.clearMessages();
 

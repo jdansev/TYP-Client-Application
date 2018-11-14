@@ -39,6 +39,7 @@ window.onload = function () {
     themePalette['ocean']);
     fluidMotion = new FluidMotion(Direction.Reversed);
     goManager = new GoManager();
+    goManager.initialise();
     goManager.register('asdf', 'asdf');
     tabManager = new TabManager();
     tabManager.initialiseTabs();

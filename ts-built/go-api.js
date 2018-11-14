@@ -2,6 +2,22 @@ var GoManager = /** @class */ (function () {
     function GoManager() {
         this.api_manager = new APIManager();
     }
+    GoManager.prototype.initialise = function () {
+        var self = this;
+        $("#hub-search").keyup(function (e) {
+            if ($('#hub-search').val() == '') {
+                tabManager.resetHubTab();
+                return;
+            }
+            if (self.hubSearchWS == null || self.hubSearchWS.readyState != self.hubSearchWS.OPEN) {
+                console.log('you are not connected.');
+                self.connectHubSearchWebsocket();
+            }
+            self.waitForSocketConnection(self.hubSearchWS, function () {
+                self.hubSearchWS.send($('#hub-search').val());
+            });
+        });
+    };
     GoManager.prototype.setup = function (u, p) {
         this.login(u, p);
     };
@@ -132,6 +148,30 @@ var GoManager = /** @class */ (function () {
                 username: self.username,
                 Message: msg
             }));
+        });
+    };
+    // Hub Search Websocket
+    GoManager.prototype.connectHubSearchWebsocket = function () {
+        var self = this;
+        self.hubSearchWS = new WebSocket("ws://localhost:1212/ws/find-hubs");
+        self.waitForSocketConnection(self.hubSearchWS, function () {
+            console.log("Connected to hub search websocket.");
+            self.hubSearchWS.onmessage = function (evt) {
+                $('#hubs__title').text('Search Results');
+                var results = evt.data.split('\n');
+                if (results.length > 0) {
+                    var json = JSON.parse(results[0]);
+                    console.log(json);
+                    tabManager.emptyHubList();
+                    var hubs = Array();
+                    for (var hub in json) {
+                        tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
+                    }
+                }
+                else {
+                    console.log("error parsing message!");
+                }
+            };
         });
     };
     // Load Hubs

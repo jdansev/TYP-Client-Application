@@ -155,12 +155,16 @@ class TabManager {
             clearTimeout(longPress);
         });
 
-        var name = $('<span/>');
+        var colorBand = $('<span/>');
+        colorBand.addClass('color-band');
+        colorBand.appendTo(h);
+
+        var name = $('<div/>');
         name.addClass('item--name');
         name.append(id);
         name.appendTo(h);
 
-        var tag = $('<span/>');
+        var tag = $('<div/>');
         tag.addClass('item--tag');
         tag.append(vis);
         tag.appendTo(h);

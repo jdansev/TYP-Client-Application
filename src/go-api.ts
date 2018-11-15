@@ -309,10 +309,10 @@ class GoManager {
                     console.log(data.responseText);
                 } else {
                     var json = JSON.parse(data);
-                    // tabManager.emptyHubList();
-                    // for (var hub in json) {
-                    //     tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
-                    // }
+                    tabManager.emptyHubList();
+                    for (var hub in json) {
+                        tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
+                    }
                 }
             },
             error: function(data, textStatus, xhr) {

@@ -21,8 +21,14 @@ class TabManager {
         
         $("#tabs a").on("click",function(e) {
 
-            if ($(this).attr('name') == '#tab__hubs') {
-                self.resetHubTab();
+            switch ($(this).attr('name')) {
+                case '#tab__hubs':
+                    self.resetHubTab();
+                    break;
+                case '#tab__people':
+                    self.resetFriendsTab();
+                    break;
+                default:
             }
     
             // identify the current tab
@@ -45,6 +51,12 @@ class TabManager {
             }
         }
 
+    }
+
+    public resetFriendsTab() {
+        $('#friends__title').text('Your Friends');
+        $("#user-search").val('');
+        goManager.loadFriends();
     }
 
     public resetHubTab() {
@@ -78,6 +90,7 @@ class TabManager {
         name.append(username);
         name.appendTo(f);
     }
+
 
     public emptyHubList() {
         $("#list__hubs").empty();

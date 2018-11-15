@@ -4,6 +4,7 @@ var GoManager = /** @class */ (function () {
     }
     GoManager.prototype.initialise = function () {
         var self = this;
+        // hub search
         $("#hub-search").keyup(function (e) {
             if ($('#hub-search').val() == '') {
                 tabManager.resetHubTab();
@@ -15,6 +16,20 @@ var GoManager = /** @class */ (function () {
             }
             self.waitForSocketConnection(self.hubSearchWS, function () {
                 self.hubSearchWS.send($('#hub-search').val());
+            });
+        });
+        // user search
+        $("#user-search").keyup(function (e) {
+            if ($('#user-search').val() == '') {
+                tabManager.resetFriendsTab();
+                return;
+            }
+            if (self.userSearchWS == null || self.userSearchWS.readyState != self.userSearchWS.OPEN) {
+                console.log('you are not connected.');
+                self.connectUserSearchWebsocket();
+            }
+            self.waitForSocketConnection(self.userSearchWS, function () {
+                self.userSearchWS.send($('#user-search').val());
             });
         });
     };
@@ -148,6 +163,28 @@ var GoManager = /** @class */ (function () {
                 username: self.username,
                 Message: msg
             }));
+        });
+    };
+    // User Search Websocket
+    GoManager.prototype.connectUserSearchWebsocket = function () {
+        var self = this;
+        self.userSearchWS = new WebSocket("ws://localhost:1212/ws/find-users");
+        self.waitForSocketConnection(self.userSearchWS, function () {
+            console.log("Connected to user search websocket.");
+            self.userSearchWS.onmessage = function (evt) {
+                $('#friends__title').text('Search Results');
+                var results = evt.data.split('\n');
+                if (results.length > 0) {
+                    var json = JSON.parse(results[0]);
+                    tabManager.emptyFriendList();
+                    for (var user in json) {
+                        tabManager.addItemToFriendList(json[user].Username);
+                    }
+                }
+                else {
+                    console.log("error parsing message!");
+                }
+            };
         });
     };
     // Hub Search Websocket

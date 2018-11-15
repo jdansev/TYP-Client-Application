@@ -5,6 +5,7 @@ class GoManager {
 
     ws: any;
     hubSearchWS: any;
+    userSearchWS: any;
 
     username: string;
     id: string;
@@ -19,6 +20,7 @@ class GoManager {
     public initialise() {
         var self: any = this;
 
+        // hub search
         $("#hub-search").keyup(function(e) {
 
             if ($('#hub-search').val() == '') {
@@ -33,6 +35,25 @@ class GoManager {
 
             self.waitForSocketConnection(self.hubSearchWS, function() {
                 self.hubSearchWS.send($('#hub-search').val());
+            });
+
+        });
+
+        // user search
+        $("#user-search").keyup(function(e) {
+
+            if ($('#user-search').val() == '') {
+                tabManager.resetFriendsTab();
+                return;
+            }
+
+            if (self.userSearchWS == null || self.userSearchWS.readyState != self.userSearchWS.OPEN) {
+                console.log('you are not connected.');
+                self.connectUserSearchWebsocket();
+            }
+
+            self.waitForSocketConnection(self.userSearchWS, function() {
+                self.userSearchWS.send($('#user-search').val());
             });
 
         });
@@ -82,7 +103,6 @@ class GoManager {
 
     }
 
-
     public register(u, p) {
 
         var self: any = this;
@@ -113,7 +133,6 @@ class GoManager {
         });
 
     }
-
 
     public createHub() {
 
@@ -198,7 +217,6 @@ class GoManager {
         5); // wait 5 miliseconds
     }
 
-
     public sendMessage(msg){
         var self: any = this;
 
@@ -217,17 +235,41 @@ class GoManager {
 
     }
 
+    // User Search Websocket
+    public connectUserSearchWebsocket() {
+        var self: any = this;
+
+        self.userSearchWS = new WebSocket("ws://localhost:1212/ws/find-users");
+        self.waitForSocketConnection(self.userSearchWS, function() {
+            console.log("Connected to user search websocket.");
+
+            self.userSearchWS.onmessage = function (evt) {
+
+                $('#friends__title').text('Search Results');
+
+                var results = evt.data.split('\n');
+
+                if (results.length > 0) {
+                    var json = JSON.parse(results[0]);
+                    tabManager.emptyFriendList();
+                    for (var user in json) {
+                        tabManager.addItemToFriendList(json[user].Username);
+                    }
+                } else {
+                    console.log("error parsing message!");
+                }
+            };
+        });
+
+    }
 
     // Hub Search Websocket
-
     public connectHubSearchWebsocket() {
         var self: any = this;
 
         self.hubSearchWS = new WebSocket("ws://localhost:1212/ws/find-hubs");
         self.waitForSocketConnection(self.hubSearchWS, function() {
             console.log("Connected to hub search websocket.");
-
-
 
             self.hubSearchWS.onmessage = function (evt) {
 
@@ -254,7 +296,6 @@ class GoManager {
         });
 
     }
-
 
     // Load Hubs
     public loadHubs() {

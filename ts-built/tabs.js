@@ -13,8 +13,14 @@ var TabManager = /** @class */ (function () {
         // show the first tab contents
         $("#tab__content > div:first").fadeIn();
         $("#tabs a").on("click", function (e) {
-            if ($(this).attr('name') == '#tab__hubs') {
-                self.resetHubTab();
+            switch ($(this).attr('name')) {
+                case '#tab__hubs':
+                    self.resetHubTab();
+                    break;
+                case '#tab__people':
+                    self.resetFriendsTab();
+                    break;
+                default:
             }
             // identify the current tab
             if ($(this).attr("id") == "current") {
@@ -33,6 +39,11 @@ var TabManager = /** @class */ (function () {
                 $(myUrlTab).fadeIn();
             }
         }
+    };
+    TabManager.prototype.resetFriendsTab = function () {
+        $('#friends__title').text('Your Friends');
+        $("#user-search").val('');
+        goManager.loadFriends();
     };
     TabManager.prototype.resetHubTab = function () {
         $('#hubs__title').text('Your Hubs');

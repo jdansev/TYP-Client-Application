@@ -46,6 +46,13 @@
 			width: 12px;
 		}
 
+		.app__menu__top {
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 12px;
+			margin-bottom: 10px;
+			float: right;
+		}
+
 	</style>
 
 </head>
@@ -53,6 +60,8 @@
 <body>
 
 	<div class="app__menu">
+
+		<!-- <div class="app__menu__top">Settings | Log out </div> -->
 
 		<ul id="tabs">
 			<li><a href="#" name="#tab__people">People</a></li>
@@ -65,7 +74,7 @@
 
 				<img src="images/search-icon.svg" class="search-icon"> <input class="search-bar" id="user-search" type="text">
 
-				<h2>Your Friends</h2>
+				<h2 id="friends__title">Your Friends</h2>
 
 				<div id="list__friends" class="tab__list">
 

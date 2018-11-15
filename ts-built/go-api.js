@@ -1,6 +1,5 @@
 var GoManager = /** @class */ (function () {
     function GoManager() {
-        this.api_manager = new APIManager();
     }
     GoManager.prototype.initialise = function () {
         var self = this;
@@ -177,6 +176,7 @@ var GoManager = /** @class */ (function () {
                 if (results.length > 0) {
                     var json = JSON.parse(results[0]);
                     tabManager.emptyFriendList();
+                    tabManager.resultsCount(json.length, $('#tab__people > .results-count'));
                     for (var user in json) {
                         tabManager.addItemToFriendList(json[user].Username);
                     }
@@ -195,12 +195,12 @@ var GoManager = /** @class */ (function () {
             console.log("Connected to hub search websocket.");
             self.hubSearchWS.onmessage = function (evt) {
                 $('#hubs__title').text('Search Results');
+                $('#create-hub').hide();
                 var results = evt.data.split('\n');
                 if (results.length > 0) {
                     var json = JSON.parse(results[0]);
-                    console.log(json);
                     tabManager.emptyHubList();
-                    var hubs = Array();
+                    tabManager.resultsCount(json.length, $('#tab__hubs > .results-count'));
                     for (var hub in json) {
                         tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
                     }

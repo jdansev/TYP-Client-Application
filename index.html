@@ -13,44 +13,22 @@
 	<link rel="stylesheet" href="styles/app.css">
 	<link rel="stylesheet" href="styles/tabs.css">
 	<link rel="stylesheet" href="styles/tab-list.css">
+	<link rel="stylesheet" href="styles/search-bar.css">
 
 	<style>
-		.search-bar {
-			font-family: Avenir;
-			font-size: 12px;
-			line-height: 12px;
-			padding: 4px 8px;
-			padding-left: 22px;
-			border: none;
-			outline: none;
-			width: 60%;
-			border-radius: 20px;
-			margin-bottom: 20px;
-			opacity: .4;
-
-			transition: 0.1s all;
-		}
-
-		.search-bar:focus {
-			opacity: .8;
-			transition: 0.1s all;
-		}
-
-		.search-icon {
-			position: absolute;
-			float: left;
-
-			padding: 6px;
-
-			height: 12px;
-			width: 12px;
-		}
 
 		.app__menu__top {
 			font-family: Arial, Helvetica, sans-serif;
 			font-size: 12px;
 			margin-bottom: 10px;
 			float: right;
+		}
+
+		.results-count {
+			font-family: Avenir;
+			color: dimgray;
+			font-size: 14px;
+			margin-bottom: 10px;
 		}
 
 	</style>
@@ -74,13 +52,13 @@
 
 				<img src="images/search-icon.svg" class="search-icon"> <input class="search-bar" id="user-search" type="text">
 
-				<h2 id="friends__title">Your Friends</h2>
+				<div class="head">
+					<span id="friends__title">Your Friends</span>
+				</div>
+
+				<div class="results-count"></div>
 
 				<div id="list__friends" class="tab__list">
-
-					<div class="list__item">John</div>
-					<div class="list__item">Peter</div>
-					<div class="list__item">David</div>
 
 				</div>
 				
@@ -89,7 +67,13 @@
 
 				<img src="images/search-icon.svg" class="search-icon"> <input id="hub-search" class="search-bar" value="" type="text">
 
-				<h2 id="hubs__title">Your Hubs</h2>
+				<div class="head">
+					<span id="hubs__title">Your Hubs</span>
+					<span id="create-hub">+</span>
+				</div>
+				
+
+				<div class="results-count"></div>
 
 				<div id="list__hubs" class="tab__list">
 					

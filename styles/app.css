@@ -350,3 +350,37 @@ input:-ms-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; fo
 
 /* hides scrollbars */
 ::-webkit-scrollbar { display: none; }
+
+
+
+/* Hub Tab */
+
+.head {
+    /* border: 1px solid #000; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+#hubs__title, #friends__title {
+    /* border: 1px solid #000; */
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#create-hub {
+    font-weight: bold;
+    /* border: 1px solid #000; */
+    float: right;
+    padding: 5px;
+    font-size: 26px;
+    color: gray;
+    transition: 0.1s all;
+}
+
+#create-hub:hover {
+    cursor: pointer;
+    color: black;
+    transition: 0.2s all;
+}

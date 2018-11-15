@@ -56,12 +56,15 @@ class TabManager {
     public resetFriendsTab() {
         $('#friends__title').text('Your Friends');
         $("#user-search").val('');
+        $('#tab__people > .results-count').empty();
         goManager.loadFriends();
     }
 
     public resetHubTab() {
         $('#hubs__title').text('Your Hubs');
+        $('#create-hub').show();
         $("#hub-search").val('');
+        $('#tab__hubs > .results-count').empty();
         goManager.loadHubs();
     }
 
@@ -70,6 +73,12 @@ class TabManager {
         $("#tab__content > div").hide();
         // reset id's
         $("#tabs a").attr("id","");
+    }
+
+    public resultsCount(n, div) {
+        var s = ' results';
+        if (n == 1) s = ' result';
+        div.text(n + s);
     }
 
     public emptyFriendList() {

@@ -43,11 +43,14 @@ var TabManager = /** @class */ (function () {
     TabManager.prototype.resetFriendsTab = function () {
         $('#friends__title').text('Your Friends');
         $("#user-search").val('');
+        $('#tab__people > .results-count').empty();
         goManager.loadFriends();
     };
     TabManager.prototype.resetHubTab = function () {
         $('#hubs__title').text('Your Hubs');
+        $('#create-hub').show();
         $("#hub-search").val('');
+        $('#tab__hubs > .results-count').empty();
         goManager.loadHubs();
     };
     TabManager.prototype.resetTabs = function () {
@@ -55,6 +58,12 @@ var TabManager = /** @class */ (function () {
         $("#tab__content > div").hide();
         // reset id's
         $("#tabs a").attr("id", "");
+    };
+    TabManager.prototype.resultsCount = function (n, div) {
+        var s = ' results';
+        if (n == 1)
+            s = ' result';
+        div.text(n + s);
     };
     TabManager.prototype.emptyFriendList = function () {
         $("#list__friends").empty();

@@ -48,36 +48,65 @@
 		</ul>
 
 		<div id="tab__content">
+
 			<div id="tab__people">
 
 				<img src="images/search-icon.svg" class="search-icon"> <input class="search-bar" id="user-search" type="text">
 
 				<div class="head">
-					<span id="friends__title">Your Friends</span>
+					<span id="friends__title" class="tab--title">Your Friends</span>
 				</div>
 
 				<div class="results-count"></div>
 
-				<div id="list__friends" class="tab__list">
-
-				</div>
+				<div id="list__friends" class="tab__list"></div>
 				
 			</div>
+
 			<div id="tab__hubs">
 
-				<img src="images/search-icon.svg" class="search-icon"> <input id="hub-search" class="search-bar" value="" type="text">
 
-				<div class="head">
-					<span id="hubs__title">Your Hubs</span>
-					<span id="create-hub">+</span>
+				<div name="hub-main" class="page__hub-main">
+
+					<img src="images/search-icon.svg" class="search-icon"> <input id="hub-search" class="search-bar" value="" type="text">
+
+					<div class="head">
+						<span id="hubs__title" class="tab--title">Your Hubs</span>
+						<span id="create-hub">+</span>
+					</div>
+	
+					<div class="results-count"></div>
+	
+					<div id="list__hubs" class="tab__list">
+
+						<div class="list__item">
+							<!-- <div class="color-band"></div> -->
+							<span class="item--name">name </span>
+							<span class="item--tag">visibility</span>
+						</div>
+
+					</div>
+
+				</div>
+
+
+				<div name="hub-info" class="page__hub-info">
+
+						<span class="tab--title">About this Hub</span>
+
+				</div>
+
+
+				<div name="create-hub" class="page__create-hub">
+
+					<span class="tab--title">Create a Hub</span>
+
+					<!-- <h3 for="">Name</h3>
+					<input type="text">
+					<h3 for="">Visibility</h3> -->
+
 				</div>
 				
-
-				<div class="results-count"></div>
-
-				<div id="list__hubs" class="tab__list">
-					
-				</div>
 
 			</div>
 			<div id="tab__notifications">

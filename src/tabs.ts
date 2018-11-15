@@ -53,10 +53,22 @@ class TabManager {
 
     }
 
+    public initHubPages() {
+
+        $("#tab__hubs > div").hide();
+        $("#tab__hubs > div[name='hub-main']").show();
+
+        $("#create-hub").on("click", function() {
+            $("#tab__hubs > div").hide();
+            $("#tab__hubs > div[name='create-hub']").fadeIn();
+        })
+
+    }
+
     public resetFriendsTab() {
         $('#friends__title').text('Your Friends');
         $("#user-search").val('');
-        $('#tab__people > .results-count').empty();
+        $('#tab__people .results-count').empty();
         goManager.loadFriends();
     }
 
@@ -64,7 +76,11 @@ class TabManager {
         $('#hubs__title').text('Your Hubs');
         $('#create-hub').show();
         $("#hub-search").val('');
-        $('#tab__hubs > .results-count').empty();
+        $('#tab__hubs .results-count').empty();
+
+        $("#tab__hubs > div").hide();
+        $("#tab__hubs > div[name='hub-main']").show();
+
         goManager.loadHubs();
     }
 
@@ -105,7 +121,15 @@ class TabManager {
         $("#list__hubs").empty();
     }
 
+    public showHubInfo() {
+
+        $("#tab__hubs > div").hide();
+        $("#tab__hubs > div[name='hub-info']").fadeIn();
+
+    }
+
     public addItemToHubList(id, vis) {
+        var self: any = this;
 
         /* Structure:
         <div class="list__item">
@@ -120,6 +144,15 @@ class TabManager {
         h.on('click', function() {
             goManager.joinHub(id);
             groupUIManager.hideMenu();
+        });
+
+        var longPress;
+        h.on("mousedown",function(){
+            longPress = setTimeout(function(){
+                self.showHubInfo();
+            }, 600);
+        }).on("mouseup mouseleave",function(){
+            clearTimeout(longPress);
         });
 
         var name = $('<span/>');

@@ -250,7 +250,7 @@ class GoManager {
 
                     tabManager.emptyFriendList();
 
-                    tabManager.resultsCount(json.length, $('#tab__people > .results-count'));
+                    tabManager.resultsCount(json.length, $('#tab__people .results-count'));
 
                     for (var user in json) {
                         tabManager.addItemToFriendList(json[user].Username);
@@ -269,12 +269,10 @@ class GoManager {
 
         self.hubSearchWS = new WebSocket("ws://localhost:1212/ws/find-hubs");
         self.waitForSocketConnection(self.hubSearchWS, function() {
+
             console.log("Connected to hub search websocket.");
 
             self.hubSearchWS.onmessage = function (evt) {
-
-                $('#hubs__title').text('Search Results');
-                $('#create-hub').hide();
 
                 var results = evt.data.split('\n');
 
@@ -282,9 +280,11 @@ class GoManager {
 
                     var json = JSON.parse(results[0]);
 
-                    tabManager.emptyHubList();
+                    $('#hubs__title').text('Search Results');
+                    $('#create-hub').hide();
+                    // tabManager.emptyHubList();
 
-                    tabManager.resultsCount(json.length, $('#tab__hubs > .results-count'));
+                    tabManager.resultsCount(json.length, $('#tab__hubs .results-count'));
                     
                     for (var hub in json) {
                         tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
@@ -309,10 +309,10 @@ class GoManager {
                     console.log(data.responseText);
                 } else {
                     var json = JSON.parse(data);
-                    tabManager.emptyHubList();
-                    for (var hub in json) {
-                        tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
-                    }
+                    // tabManager.emptyHubList();
+                    // for (var hub in json) {
+                    //     tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
+                    // }
                 }
             },
             error: function(data, textStatus, xhr) {

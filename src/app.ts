@@ -49,9 +49,9 @@ window.onload = function() {
     colorFade = new ColorFade(
         // themePalette['endless river'],
         // themePalette['redish yellow'],
-        // themePalette['vivid'],
+        themePalette['vivid'],
         // themePalette['ibiza sunset'],
-        themePalette['ocean'],
+        // themePalette['ocean'],
         // themePalette['purplish red'],
         // themePalette['redgray'],
         // themePalette['quepal'],
@@ -66,6 +66,8 @@ window.onload = function() {
 
     tabManager = new TabManager();
     tabManager.initialiseTabs();
+
+    tabManager.initHubPages();
 
 }
 

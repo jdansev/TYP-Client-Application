@@ -280,74 +280,6 @@ input:-ms-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; fo
     transition: clip 0.4s;
 }
 
-
-.groups__container {
-    display: inline-block;
-    position: relative;
-
-    width: 100%;
-
-    padding: 0;
-    margin: 0;
-    border-top: 2px solid #888;
-}
-
-.group {
-    border: 2px solid lightgray;
-    box-shadow: 1px 1px 3px #e3e3e3;
-    border-radius: 3px;
-    margin-top: 5px;
-    -webkit-transition: box-shadow 0.2s;
-    transition: box-shadow 0.2s;
-    cursor: pointer;
-}
-
-.current-group {
-    border: 2px solid #2ecc71;
-}
-
-.group:hover {
-    box-shadow: 2px 2px 15px #b3b3b3;
-    -webkit-transition: box-shadow 0.2s;
-    transition: box-shadow 0.2s;
-}
-
-.group:active {
-    box-shadow: 1px 1px 3px #e3e3e3;
-    -webkit-transition: box-shadow 0.1s;
-    transition: box-shadow 0.1s;
-}
-
-.group__item {
-    font-family: Avenir;
-    margin: 0px;
-}
-
-.group--name {
-    font-size: 16px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    margin: 8px;
-    margin-bottom: 0;
-}
-
-.group--description {
-    font-size: 12px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    margin: 8px;
-    margin-top: 0;
-}
-
-.groups__title {
-    font-family: Avenir;
-    font-size: 14px;
-    width: 250px;
-    padding: 2px;
-}
-
 /* hides scrollbars */
 ::-webkit-scrollbar { display: none; }
 
@@ -362,8 +294,7 @@ input:-ms-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; fo
     justify-content: space-between
 }
 
-#hubs__title, #friends__title {
-    /* border: 1px solid #000; */
+.tab--title {
     font-size: 1.5em;
     font-weight: bold;
     margin-bottom: 5px;
@@ -383,4 +314,13 @@ input:-ms-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; fo
     cursor: pointer;
     color: black;
     transition: 0.2s all;
+}
+
+
+.color-band {
+    display: inline-block;
+    width: 5px;
+    height: 100%;
+    border: 1px solid #000;
+    box-sizing: border-box;
 }

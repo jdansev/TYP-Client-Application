@@ -40,17 +40,27 @@ var TabManager = /** @class */ (function () {
             }
         }
     };
+    TabManager.prototype.initHubPages = function () {
+        $("#tab__hubs > div").hide();
+        $("#tab__hubs > div[name='hub-main']").show();
+        $("#create-hub").on("click", function () {
+            $("#tab__hubs > div").hide();
+            $("#tab__hubs > div[name='create-hub']").fadeIn();
+        });
+    };
     TabManager.prototype.resetFriendsTab = function () {
         $('#friends__title').text('Your Friends');
         $("#user-search").val('');
-        $('#tab__people > .results-count').empty();
+        $('#tab__people .results-count').empty();
         goManager.loadFriends();
     };
     TabManager.prototype.resetHubTab = function () {
         $('#hubs__title').text('Your Hubs');
         $('#create-hub').show();
         $("#hub-search").val('');
-        $('#tab__hubs > .results-count').empty();
+        $('#tab__hubs .results-count').empty();
+        $("#tab__hubs > div").hide();
+        $("#tab__hubs > div[name='hub-main']").show();
         goManager.loadHubs();
     };
     TabManager.prototype.resetTabs = function () {
@@ -83,7 +93,12 @@ var TabManager = /** @class */ (function () {
     TabManager.prototype.emptyHubList = function () {
         $("#list__hubs").empty();
     };
+    TabManager.prototype.showHubInfo = function () {
+        $("#tab__hubs > div").hide();
+        $("#tab__hubs > div[name='hub-info']").fadeIn();
+    };
     TabManager.prototype.addItemToHubList = function (id, vis) {
+        var self = this;
         /* Structure:
         <div class="list__item">
             <span class="item--name"> NAME </span>
@@ -96,6 +111,14 @@ var TabManager = /** @class */ (function () {
         h.on('click', function () {
             goManager.joinHub(id);
             groupUIManager.hideMenu();
+        });
+        var longPress;
+        h.on("mousedown", function () {
+            longPress = setTimeout(function () {
+                self.showHubInfo();
+            }, 600);
+        }).on("mouseup mouseleave", function () {
+            clearTimeout(longPress);
         });
         var name = $('<span/>');
         name.addClass('item--name');

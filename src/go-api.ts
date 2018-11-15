@@ -282,7 +282,7 @@ class GoManager {
 
                     $('#hubs__title').text('Search Results');
                     $('#create-hub').hide();
-                    // tabManager.emptyHubList();
+                    tabManager.emptyHubList();
 
                     tabManager.resultsCount(json.length, $('#tab__hubs .results-count'));
                     

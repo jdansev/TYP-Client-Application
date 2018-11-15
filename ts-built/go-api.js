@@ -199,7 +199,7 @@ var GoManager = /** @class */ (function () {
                     var json = JSON.parse(results[0]);
                     $('#hubs__title').text('Search Results');
                     $('#create-hub').hide();
-                    // tabManager.emptyHubList();
+                    tabManager.emptyHubList();
                     tabManager.resultsCount(json.length, $('#tab__hubs .results-count'));
                     for (var hub in json) {
                         tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);

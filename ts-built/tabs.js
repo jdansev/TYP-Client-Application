@@ -97,7 +97,14 @@ var TabManager = /** @class */ (function () {
         $("#tab__hubs > div").hide();
         $("#tab__hubs > div[name='hub-info']").fadeIn();
     };
-    TabManager.prototype.addItemToHubList = function (id, vis) {
+    TabManager.prototype.addColorBand = function (h, s) {
+        // turn this into a separate method
+        var colorBand = $('<span/>');
+        colorBand.addClass('color-band');
+        colorBand.appendTo(h);
+        colorBand[0].style.backgroundImage = "linear-gradient(" + s.Start + ", " + s.End + ")";
+    };
+    TabManager.prototype.addItemToHubList = function (id, vis, spec) {
         var self = this;
         /* Structure:
         <div class="list__item">
@@ -109,8 +116,12 @@ var TabManager = /** @class */ (function () {
         h.addClass('list__item');
         h.addClass('list__item--hub');
         h.on('click', function () {
+            console.log(h.data('Spectrum'));
             goManager.joinHub(id);
             groupUIManager.hideMenu();
+            var spectrum = $(this).data('Spectrum');
+            colorFade.changeTheme([spectrum.Start, spectrum.End]);
+            messageUIManager.setColorScheme(spectrum.End);
         });
         var longPress;
         h.on("mousedown", function () {
@@ -120,9 +131,8 @@ var TabManager = /** @class */ (function () {
         }).on("mouseup mouseleave", function () {
             clearTimeout(longPress);
         });
-        var colorBand = $('<span/>');
-        colorBand.addClass('color-band');
-        colorBand.appendTo(h);
+        h.data('Spectrum', spec);
+        this.addColorBand(h, spec);
         var name = $('<div/>');
         name.addClass('item--name');
         name.append(id);

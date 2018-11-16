@@ -128,7 +128,17 @@ class TabManager {
 
     }
 
-    public addItemToHubList(id, vis) {
+    public addColorBand(h, s) {
+
+        // turn this into a separate method
+        var colorBand = $('<span/>');
+        colorBand.addClass('color-band');
+        colorBand.appendTo(h);
+        colorBand[0].style.backgroundImage = "linear-gradient("+s.Start+", "+s.End+")";
+
+    }
+
+    public addItemToHubList(id, vis, spec) {
         var self: any = this;
 
         /* Structure:
@@ -139,11 +149,15 @@ class TabManager {
         */
 
         var h = $('<div/>');
-        h.addClass('list__item')
-        h.addClass('list__item--hub')
+        h.addClass('list__item');
+        h.addClass('list__item--hub');
         h.on('click', function() {
+            console.log(h.data('Spectrum'));
             goManager.joinHub(id);
             groupUIManager.hideMenu();
+            var spectrum = $(this).data('Spectrum');
+            colorFade.changeTheme([spectrum.Start, spectrum.End]);
+            messageUIManager.setColorScheme(spectrum.End);
         });
 
         var longPress;
@@ -155,9 +169,10 @@ class TabManager {
             clearTimeout(longPress);
         });
 
-        var colorBand = $('<span/>');
-        colorBand.addClass('color-band');
-        colorBand.appendTo(h);
+
+        h.data('Spectrum', spec);
+        this.addColorBand(h, spec);
+
 
         var name = $('<div/>');
         name.addClass('item--name');

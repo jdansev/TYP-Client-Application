@@ -95,7 +95,9 @@ var GoManager = /** @class */ (function () {
             url: url,
             data: {
                 hub_id: hub_id,
-                hub_visibility: visibility
+                hub_visibility: visibility,
+                hub_spec_start: '#36D1DC',
+                hub_spec_end: '#5B86E5',
             },
             success: function (data, textStatus, xhr) {
                 if (xhr.status != 200) {
@@ -202,7 +204,7 @@ var GoManager = /** @class */ (function () {
                     tabManager.emptyHubList();
                     tabManager.resultsCount(json.length, $('#tab__hubs .results-count'));
                     for (var hub in json) {
-                        tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
+                        tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility, json[hub].Spectrum);
                     }
                 }
                 else {
@@ -225,7 +227,7 @@ var GoManager = /** @class */ (function () {
                     var json = JSON.parse(data);
                     tabManager.emptyHubList();
                     for (var hub in json) {
-                        tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility);
+                        tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility, json[hub].Spectrum);
                     }
                 }
             },

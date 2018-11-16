@@ -27,15 +27,15 @@ window.onload = function() {
     electronConfig();
 
 
-    var themePalette = {
-        'endless river': ['#43cea2', '#185a9d'],
-        'redish yellow': ['#f1c40f', '#e74c3c'],
-        'vivid': ['#fcb045', '#ee0979'],
-        'ibiza sunset': ['#ff6a00','#ee0979'],
-        'ocean': ['#36D1DC','#5B86E5'],
-        'purplish red': ['#8e44ad','#c0392b'],
-        'redgray': ['#f3f3f3','#5B86E5'],
-        'quepal': ['#38ef7d', '#11998e'],
+    var spectrum = {
+        'Endless River': ['#43cea2', '#185a9d'],
+        'Redish Yellow': ['#f1c40f', '#e74c3c'],
+        'Vivid': ['#fcb045', '#ee0979'],
+        'Ibiza Sunset': ['#ff6a00','#ee0979'],
+        'Ocean': ['#36D1DC','#5B86E5'],
+        'Purplish Red': ['#8e44ad','#c0392b'],
+        'Redgray': ['#f3f3f3','#5B86E5'],
+        'Quepal': ['#38ef7d', '#11998e'],
     }
 
     
@@ -47,14 +47,14 @@ window.onload = function() {
     groupUIManager = new GroupUIManager();
     
     colorFade = new ColorFade(
-        // themePalette['endless river'],
-        // themePalette['redish yellow'],
-        themePalette['vivid'],
-        // themePalette['ibiza sunset'],
-        // themePalette['ocean'],
-        // themePalette['purplish red'],
-        // themePalette['redgray'],
-        // themePalette['quepal'],
+        // spectrum['Endless River'],
+        // spectrum['Redish Yellow'],
+        spectrum['Vivid'],
+        // spectrum['Ibiza Sunset'],
+        // spectrum['Ocean'],
+        // spectrum['Purplish Red'],
+        // spectrum['Redgray'],
+        // spectrum['Quepal'],
     );
 
     fluidMotion = new FluidMotion(Direction.Reversed);
@@ -68,6 +68,35 @@ window.onload = function() {
     tabManager.initialiseTabs();
 
     tabManager.initHubPages();
+
+
+
+
+    /*Dropdown Menu*/
+    $('.dropdown').click(function () {
+        $(this).attr('tabindex', 1).focus();
+        $(this).toggleClass('active');
+        $(this).find('.dropdown-menu').slideToggle(200);
+    });
+    $('.dropdown').focusout(function () {
+        $(this).removeClass('active');
+        $(this).find('.dropdown-menu').slideUp(200);
+    });
+
+    for (var color in spectrum) {
+        var l = $('<li/>');
+        l.append(color);
+        $('.dropdown .dropdown-menu').append(l);
+        l.data('Spectrum', spectrum[color]);
+        l.click(function() {
+            $(this).parents('.dropdown').find('span').text($(this).text());
+            $(this).parents('.dropdown').find('span').data('Spectrum', $(this).data('Spectrum'));
+            $(this).parents('.dropdown').find('input').attr('value', $(this).attr('id'));
+            console.log($(this).data('Spectrum'));
+        });
+    }
+
+    /*End Dropdown Menu*/
 
 }
 

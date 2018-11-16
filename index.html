@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="styles/tabs.css">
 	<link rel="stylesheet" href="styles/tab-list.css">
 	<link rel="stylesheet" href="styles/search-bar.css">
+	<link rel="stylesheet" href="styles/form-elements.css">
 
 	<style>
 
@@ -100,6 +101,58 @@
 				<div name="create-hub" class="page__create-hub">
 
 					<span class="tab--title">Create a Hub</span>
+
+					<form onsubmit="return goManager.cHub(event)" id="create-hub-form" action="">
+
+						<!-- Input -->
+						<input id="hub-name" name="hub-name" type="text" placeholder="Name">
+
+
+						<!-- Radio -->
+						<div class="radio-group">
+							<div class="radio-pair">
+								<input type="radio" id="public" name="hub-visibility" checked>
+								<label for="public">public</label>
+							</div>
+		
+							<div class="radio-pair">
+								<input type="radio" id="private" name="hub-visibility">
+								<label for="private">private</label>
+							</div>
+		
+							<div class="radio-pair">
+								<input type="radio" id="secret" name="hub-visibility">
+								<label for="secret">secret</label>
+							</div>
+						</div>
+
+
+
+
+						<!-- Dropdown -->
+						<div class="dropdown__container">
+							
+								<div class="dropdown">
+									<div class="select">
+										<span>Spectrum</span>
+									</div>
+									<input type="hidden" name="gender">
+									<ul class="dropdown-menu">
+										<!-- dynamically populated -->
+									</ul>
+								</div>
+						</div>
+
+
+
+
+						<button type="submit" class="typ__btn">Create</button>
+
+					</form>
+					
+
+					
+
 
 					<!-- <h3 for="">Name</h3>
 					<input type="text">

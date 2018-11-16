@@ -130,6 +130,51 @@ class GoManager {
 
     }
 
+    public cHub(e) {
+
+        e.preventDefault();
+
+        var self: any = this;
+
+        var visibility = $('input[name=hub-visibility]:checked').attr('id');
+        console.log(visibility);
+
+        var name = $('input[name=hub-name]').val();
+        console.log(name);
+
+        var spec = $('#create-hub-form .dropdown').find('span').data('Spectrum');
+        console.log(spec);
+
+        var url = 'http://localhost:1212/create-hub?token=' + this.token;
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                hub_id: name,
+                hub_visibility: visibility,
+                hub_spec_start: spec[0],
+                hub_spec_end: spec[1],
+            },
+            success: function(data, textStatus, xhr) {
+                if (xhr.status != 200) {
+                    console.log(data.responseText);
+                } else {
+                    console.log('hub successfully created');
+                    var js = JSON.parse(data);
+                    console.log(js);
+
+                }
+            },
+            error: function(data, textStatus, xhr) {
+                console.log(data.responseText);
+            }
+        });
+
+        return false;
+
+    }
+
     public createHub() {
 
         var self: any = this;
@@ -264,6 +309,7 @@ class GoManager {
         });
 
     }
+
 
     // Hub Search Websocket
     public connectHubSearchWebsocket() {

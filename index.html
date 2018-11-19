@@ -16,17 +16,20 @@
 	<link rel="stylesheet" href="styles/search-bar.css">
 	<link rel="stylesheet" href="styles/form-elements.css">
 
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
 	<style>
 
 		.app__menu__top {
-			font-family: Arial, Helvetica, sans-serif;
+			font-family: 'Roboto', sans-serif;
 			font-size: 12px;
 			margin-bottom: 10px;
 			float: right;
 		}
 
 		.results-count {
-			font-family: Avenir;
+			font-family: 'Roboto', sans-serif;
 			color: dimgray;
 			font-size: 14px;
 			margin-bottom: 10px;
@@ -94,6 +97,10 @@
 				<div name="hub-info" class="page__hub-info">
 
 						<span class="tab--title">About this Hub</span>
+
+						<div id="hub-info-name"></div>
+
+						<div id="hub-info-members"></div>
 
 				</div>
 
@@ -223,7 +230,9 @@
 	<script src="ts-built/gradient-factory.js"></script>
 	<script src="ts-built/groups.js"></script>
 	<script src="ts-built/messages.js"></script>
+
 	<script src="ts-built/tabs.js"></script>
+	<script src="ts-built/hub-tab.js"></script>
 	
 </body>
 </html>

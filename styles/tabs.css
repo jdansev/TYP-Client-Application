@@ -6,7 +6,8 @@
     overflow: hidden;
     list-style: none;
 
-    font-family: Arial, Helvetica;
+    /* font-family: Arial, Helvetica; */
+    font-family: 'Roboto', sans-serif;
     font-size: 12px;
 }
 
@@ -18,17 +19,18 @@
 #tabs a {
     float: left;
     position: relative;
-    padding: 0 16px;
+    padding: 0 12px;
     height: 0;
     line-height: 24px;
     text-transform: uppercase;
     text-decoration: none;
     color: #fff;
-    border-right: 28px solid transparent;
+    border-right: 20px solid transparent;
     border-bottom: 22px solid #3D3D3D;
     border-bottom-color: #777;
     opacity: .5;
     filter: alpha(opacity=50);
+    margin-right: 6px;
 }
 
 #tabs a:hover,
@@ -51,11 +53,13 @@
 
 /* ----------- */
 #tab__content {
-    font-family: Arial, Helvetica;
+    /* font-family: Arial, Helvetica; */
+    font-family: 'Roboto', sans-serif;
     /* background: #fff; */
     background: transparent;
     border-top: 2px solid #3d3d3d;
-    padding: 2em;
+    /* padding: 2em; */
+    padding: 12px;
     padding-top: 1.5em;
 }
 

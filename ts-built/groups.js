@@ -19,25 +19,25 @@ var GroupUIManager = /** @class */ (function () {
         this.mouse_leave_lock = false;
         this.menu_div.stop().animate({
             right: "0",
-        }, 300);
+        }, 280);
         this.dim.css({
             display: 'block',
         });
         this.dim.stop().animate({
             opacity: 0.65,
-        }, 300, function () {
+        }, 280, function () {
         });
     };
     GroupUIManager.prototype.hideMenu = function () {
         var self = this;
         self.menu_div.stop().animate({
             right: "-400px",
-        }, 300, function () {
+        }, 280, function () {
             self.mouse_leave_lock = false;
         });
         self.dim.stop().animate({
             opacity: 0,
-        }, 300, function () {
+        }, 280, function () {
             self.dim.css({
                 display: 'none',
             });

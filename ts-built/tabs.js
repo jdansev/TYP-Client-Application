@@ -93,7 +93,9 @@ var TabManager = /** @class */ (function () {
     TabManager.prototype.emptyHubList = function () {
         $("#list__hubs").empty();
     };
-    TabManager.prototype.showHubInfo = function () {
+    TabManager.prototype.showHubInfo = function (hub_info) {
+        console.log(hub_info);
+        $("#hub-info-name").text(hub_info.ID);
         $("#tab__hubs > div").hide();
         $("#tab__hubs > div[name='hub-info']").fadeIn();
     };
@@ -113,6 +115,7 @@ var TabManager = /** @class */ (function () {
         </div>
         */
         var h = $('<div/>');
+        h.data('id', id);
         h.addClass('list__item');
         h.addClass('list__item--hub');
         h.on('click', function () {
@@ -126,7 +129,10 @@ var TabManager = /** @class */ (function () {
         var longPress;
         h.on("mousedown", function () {
             longPress = setTimeout(function () {
-                self.showHubInfo();
+                console.log(id);
+                goManager.getHubInfo(id);
+                // console.log(hub_info);
+                // self.showHubInfo(hub_info);
             }, 600);
         }).on("mouseup mouseleave", function () {
             clearTimeout(longPress);
@@ -141,18 +147,24 @@ var TabManager = /** @class */ (function () {
         tag.addClass('item--tag');
         tag.append(vis);
         tag.appendTo(h);
-        switch (vis) {
-            case "public":
-                tag.addClass('tag--public');
-                break;
-            case "private":
-                tag.addClass('tag--private');
-                break;
-            case "secret":
-                tag.addClass('tag--secret');
-                break;
-            default:
-        }
+        h.on('mouseenter', function () {
+            switch (vis) {
+                case "public":
+                    tag.addClass('tag--public');
+                    break;
+                case "private":
+                    tag.addClass('tag--private');
+                    break;
+                case "secret":
+                    tag.addClass('tag--secret');
+                    break;
+                default:
+            }
+        });
+        h.on('mouseleave', function () {
+            tag.removeClass();
+            tag.addClass('item--tag');
+        });
         h.appendTo('#list__hubs');
     };
     return TabManager;

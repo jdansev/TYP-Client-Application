@@ -369,8 +369,30 @@ class GoManager {
         });
     }
 
+    public getHubInfo(hub_id) {
+        var self: any = this;
+        $.ajax({
+            type: 'GET',
+            url: "http://localhost:1212/hub-info/" + hub_id + "?token=" + my_token,
+            success: function(data, textStatus, xhr) {
+                if (xhr.status != 200) {
+                    console.log(data.responseText);
+                } else {
+
+                    var json = JSON.parse(data);
+                    console.log(json);
+                    tabManager.showHubInfo(json);
+                }
+            },
+            error: function(data, textStatus, xhr) {
+                console.log(data.responseText);
+            }
+        });
+        return null;
+    }
+
     // Load Hub Messages
-    loadHubMessages(hub_id) {
+    public loadHubMessages(hub_id) {
         var self: any = this;
         $.ajax({
             type: 'GET',

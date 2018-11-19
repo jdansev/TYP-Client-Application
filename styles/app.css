@@ -35,7 +35,6 @@ html, body {
     
     width: 100%;
     height: 50px;
-    font-family: Arial;
     text-align: center;
 
     color: gray;
@@ -115,7 +114,8 @@ html, body {
     color: #8a8a8a;
     padding: 10px 12px 4px 12px;
     font-size: 11px;
-    font-family: "Helvetica Neue";
+    /* font-family: "Helvetica Neue"; */
+    font-family: 'Roboto', sans-serif;
 }
 
 .message {
@@ -139,20 +139,45 @@ html, body {
 
 /* Message Input */
 
-input::-webkit-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; font-size: 16px; letter-spacing: 0.6px; }
-input:-moz-placeholder { color: #e3e3e3 !important; font-family: Avenir; font-size: 16px; letter-spacing: 0.6px;}
-input::-moz-placeholder { color: #e3e3e3 !important; font-family: Avenir; font-size: 16px; letter-spacing: 0.6px;}
-input:-ms-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; font-size: 16px; letter-spacing: 0.6px;}
+input::-webkit-input-placeholder {
+    color: #e3e3e3 !important;
+    /* font-family: Avenir; */
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px; letter-spacing: 0.6px;
+}
+input:-moz-placeholder {
+    color: #e3e3e3 !important;
+    /* font-family: Avenir; */
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.6px;
+}
+input::-moz-placeholder {
+    color: #e3e3e3 !important;
+    /* font-family: Avenir; */
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.6px;
+}
+input:-ms-input-placeholder {
+    color: #e3e3e3 !important;
+    /* font-family: Avenir; */
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.6px;
+}
 
 .app__message-input {
     display: flex;
     padding: 12px 12px 12px 20px;
     border-top: 1px solid #e3e3e3;
     background-color: white;
+    /* font-family: 'Roboto', sans-serif; */
 }
 
 #message-input {
-    font-family: 'Work Sans', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    /* font-family: 'Work Sans', sans-serif; */
     font-size: 14px;
     background: transparent;
     
@@ -234,7 +259,7 @@ input:-ms-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; fo
     border: none;
     background-color: #eee;
 
-    background-image: url(data:image/gif;base64,R0lGODlhCAAIAJEAAMzMzP///////wAAACH5BAEHAAIALAAAAAAIAAgAAAINhG4nudroGJBRsYcxKAA7);
+    /* background-image: url(data:image/gif;base64,R0lGODlhCAAIAJEAAMzMzP///////wAAACH5BAEHAAIALAAAAAAIAAgAAAINhG4nudroGJBRsYcxKAA7); */
 
     right: -400px;
     
@@ -295,7 +320,9 @@ input:-ms-input-placeholder { color: #e3e3e3 !important; font-family: Avenir; fo
 }
 
 .tab--title {
-    font-size: 1.5em;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    /* font-size: 1.5em; */
     font-weight: bold;
     margin-bottom: 5px;
 }

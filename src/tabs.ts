@@ -116,7 +116,7 @@ class TabManager {
             console.log('friend clicked');
         });
 
-        var jdenticon = $('<svg height="40" width="40" data-jdenticon-value="'+username+'"></svg>');
+        var jdenticon = $('<svg style="float:left" height="40" width="40" data-jdenticon-value="'+username+'"></svg>');
         jdenticon.appendTo(f);
 
         var name = $('<span/>');
@@ -144,7 +144,6 @@ class TabManager {
 
     public addColorBand(h, s) {
 
-        // turn this into a separate method
         var colorBand = $('<span/>');
         colorBand.addClass('color-band');
         colorBand.appendTo(h);
@@ -152,13 +151,15 @@ class TabManager {
 
     }
 
-    public addItemToHubList(id, vis, spec) {
+    public addItemToHubList(id, vis, spec, msg) {
         var self: any = this;
 
         /* Structure:
         <div class="list__item">
-            <span class="item--name"> NAME </span>
-            <span class="item--tag"> VISIBILITY </span>
+            <div class="color-band"></div>
+            <div class="item--name">NAME</div>
+            <div class="item--message-preview">LAST MESSAGE</div>
+            <div class="item--tag">VISIBILITY</div>
         </div>
         */
 
@@ -194,6 +195,10 @@ class TabManager {
         name.addClass('item--name');
         name.append(id);
         name.appendTo(h);
+
+        var mp = $('<div class="item--message-preview">'+msg+'</div>');
+        mp.appendTo(h);
+        
 
         var tag = $('<div/>');
         tag.addClass('item--tag');

@@ -260,9 +260,10 @@ var GoManager = /** @class */ (function () {
                 }
                 else {
                     var json = JSON.parse(data);
+                    console.log(json);
                     tabManager.emptyHubList();
                     for (var hub in json) {
-                        tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility, json[hub].Spectrum);
+                        tabManager.addItemToHubList(json[hub].Tag.ID, json[hub].Tag.Visibility, json[hub].Tag.Spectrum, json[hub].LastMessage.Message);
                     }
                 }
             },

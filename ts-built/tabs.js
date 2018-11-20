@@ -79,12 +79,19 @@ var TabManager = /** @class */ (function () {
         $("#list__friends").empty();
     };
     TabManager.prototype.addItemToFriendList = function (username) {
+        /* Structure:
+        <div class="list__item">
+            <span class="item--name"> NAME </span>
+        </div>
+        */
         var f = $('<div/>');
         f.addClass('list__item');
         f.appendTo('#list__friends');
         f.on('click', function () {
             console.log('friend clicked');
         });
+        var jdenticon = $('<svg height="40" width="40" data-jdenticon-value="' + username + '"></svg>');
+        jdenticon.appendTo(f);
         var name = $('<span/>');
         name.addClass('item--name');
         name.append(username);

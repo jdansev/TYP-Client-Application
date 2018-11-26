@@ -238,8 +238,9 @@ var GoManager = /** @class */ (function () {
                     $('#create-hub').hide();
                     tabManager.emptyHubList();
                     tabManager.resultsCount(json.length, $('#tab__hubs .results-count'));
-                    for (var hub in json) {
-                        tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility, json[hub].Spectrum);
+                    for (var _i = 0, json_1 = json; _i < json_1.length; _i++) {
+                        var hub = json_1[_i];
+                        tabManager.addItemToHubList(hub.ID, hub.Visibility, hub.Spectrum, hub.LastMessage);
                     }
                 }
                 else {

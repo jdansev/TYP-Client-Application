@@ -27,6 +27,8 @@ var GroupUIManager = /** @class */ (function () {
             opacity: 0.65,
         }, 280, function () {
         });
+        tabManager.resetHubTab();
+        tabManager.resetFriendsTab();
     };
     GroupUIManager.prototype.hideMenu = function () {
         var self = this;

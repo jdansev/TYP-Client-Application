@@ -46,6 +46,9 @@ class GroupUIManager {
             opacity: 0.65,
         }, 280, function() {
         });
+
+        tabManager.resetHubTab();
+        tabManager.resetFriendsTab();
     }
 
     public hideMenu() {

@@ -334,8 +334,8 @@ class GoManager {
 
                     tabManager.resultsCount(json.length, $('#tab__hubs .results-count'));
                     
-                    for (var hub in json) {
-                        tabManager.addItemToHubList(json[hub].ID, json[hub].Visibility, json[hub].Spectrum);
+                    for (var hub of json) {
+                        tabManager.addItemToHubList(hub.ID, hub.Visibility, hub.Spectrum, hub.LastMessage);
                     }
 
                 } else {

@@ -52,6 +52,7 @@
 .item--message-preview {
     font-size: 13px;
     font-family: 'Roboto', sans-serif;
+    font-weight: normal;
     color: #bdc3c7;
 
     height: 100%;
@@ -64,6 +65,14 @@
 
     padding-left: 8px;
     padding-right: 65px;
+
+    transition: all 0.2s;
+}
+
+.item--message-preview--unread {
+    font-weight: bold;
+    color: black;
+    transition: all 0.2s;
 }
 
 .item--tag {

@@ -151,7 +151,7 @@ class TabManager {
 
     }
 
-    public addItemToHubList(id, vis, spec, msg) {
+    public addItemToHubList(id, vis, spec, msg, read) {
         var self: any = this;
 
         /* Structure:
@@ -169,6 +169,7 @@ class TabManager {
         h.addClass('list__item--hub');
         h.on('click', function() {
             console.log(h.data('Spectrum'));
+            h.find('.item--message-preview').removeClass('item--message-preview--unread');
             goManager.joinHub(id);
             groupUIManager.hideMenu();
             var spectrum = $(this).data('Spectrum');
@@ -196,7 +197,11 @@ class TabManager {
         name.append(id);
         name.appendTo(h);
 
+        // message preview
         var mp = $('<div class="item--message-preview">'+msg+'</div>');
+        if (read != undefined && !read) {
+            mp.addClass('item--message-preview--unread');
+        }
         mp.appendTo(h);
         
 

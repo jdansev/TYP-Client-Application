@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@types/jquery": "^3.3.22",
-    "@types/node": "^10.12.3"
+    "@types/node": "^10.12.10",
+    "rxjs": "^6.3.3"
   }
 }

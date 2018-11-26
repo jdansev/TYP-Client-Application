@@ -1,11 +1,12 @@
 
 
-
 class GoManager {
 
     ws: any;
     hubSearchWS: any;
     userSearchWS: any;
+
+    mainWS: any;
 
     username: string;
     id: string;
@@ -89,6 +90,12 @@ class GoManager {
 
                     self.loadHubs();
                     self.loadFriends();
+
+                    // connect the main socket
+                    if (self.mainWS == null || self.mainWS.readyState != self.mainWS.OPEN) {
+                        console.log('you are not connected.');
+                        self.connectMainSocket();
+                    }
 
                 }
             },
@@ -335,7 +342,7 @@ class GoManager {
                     tabManager.resultsCount(json.length, $('#tab__hubs .results-count'));
                     
                     for (var hub of json) {
-                        tabManager.addItemToHubList(hub.ID, hub.Visibility, hub.Spectrum, hub.LastMessage);
+                        tabManager.addItemToHubList(hub.ID, hub.Visibility, hub.Spectrum, hub.LastMessage, undefined);
                     }
 
                 } else {
@@ -344,6 +351,59 @@ class GoManager {
             };
         });
 
+    }
+
+    // Main Socket
+    public connectMainSocket() {
+        var self: any = this;
+        self.mainWS = new WebSocket("ws://localhost:1212/ws/notificationHandler?token="+self.token);
+
+        self.waitForSocketConnection(self.mainWS, function() {
+
+            console.log("Connected to main websocket.");
+
+            self.mainWS.onmessage = function (evt) {
+
+                var messages = evt.data.split('\n');
+                var msg = JSON.parse(messages[0]);
+                console.log(msg);
+
+                switch(msg.Type) {
+                    case "friendRequestReceived":
+                        self.loadFriends();
+                        break;
+                    case "youAcceptedFriendRequest":
+                        self.loadFriends();
+                        // reload notifications
+                        break;
+                    case "requestAccepted":
+                        self.loadFriends();
+                        // reload notifications
+                    case "youDeclinedFriendRequest":
+                        self.loadFriends();
+                        // reload notifications
+
+                    case "hubMessage":
+                        console.log(msg.Body);
+
+                        let senderID = msg.Body.Sender.ID;
+                        if (senderID != my_id) {
+                            const notification = new Notification(msg.Body.Sender.Username, {
+                                body: msg.Body.Message
+                            });
+                            notification.onclick = () => {
+                            }
+                        }
+                        
+                        self.loadHubs();
+                        
+                        break;
+                    default:
+                }
+
+            };
+
+        });
     }
 
     // Load Hubs
@@ -359,8 +419,8 @@ class GoManager {
                     var json = JSON.parse(data);
                     console.log(json);
                     tabManager.emptyHubList();
-                    for (var hub in json) {
-                        tabManager.addItemToHubList(json[hub].Tag.ID, json[hub].Tag.Visibility, json[hub].Tag.Spectrum, json[hub].LastMessage.Message);
+                    for (var hub of json) {
+                        tabManager.addItemToHubList(hub.Tag.ID, hub.Tag.Visibility, hub.Tag.Spectrum, hub.LastMessage.Message, hub.ReadLatest);
                     }
                 }
             },

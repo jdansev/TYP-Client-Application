@@ -9,9 +9,9 @@ var GroupUIManager = /** @class */ (function () {
         self.group_item = $('.group');
         self.api_manager = new APIManager();
         self.mouse_leave_lock = false;
-        self.menu_div.mouseleave(function () {
-            (!self.mouse_leave_lock) ? self.hideMenu() : self.mouse_leave_lock = false;
-        });
+        // self.menu_div.mouseleave(function() {
+        //     (!self.mouse_leave_lock) ? self.hideMenu() : self.mouse_leave_lock = false;
+        // });
         // self.getFirstGroup();
     }
     GroupUIManager.prototype.showMenu = function () {
@@ -34,12 +34,12 @@ var GroupUIManager = /** @class */ (function () {
         var self = this;
         self.menu_div.stop().animate({
             right: "-400px",
-        }, 280, function () {
+        }, 400, function () {
             self.mouse_leave_lock = false;
         });
         self.dim.stop().animate({
             opacity: 0,
-        }, 280, function () {
+        }, 400, function () {
             self.dim.css({
                 display: 'none',
             });

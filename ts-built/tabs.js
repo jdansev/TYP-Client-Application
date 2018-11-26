@@ -112,7 +112,7 @@ var TabManager = /** @class */ (function () {
         colorBand.appendTo(h);
         colorBand[0].style.backgroundImage = "linear-gradient(" + s.Start + ", " + s.End + ")";
     };
-    TabManager.prototype.addItemToHubList = function (id, vis, spec, msg) {
+    TabManager.prototype.addItemToHubList = function (id, vis, spec, msg, read) {
         var self = this;
         /* Structure:
         <div class="list__item">
@@ -128,6 +128,7 @@ var TabManager = /** @class */ (function () {
         h.addClass('list__item--hub');
         h.on('click', function () {
             console.log(h.data('Spectrum'));
+            h.find('.item--message-preview').removeClass('item--message-preview--unread');
             goManager.joinHub(id);
             groupUIManager.hideMenu();
             var spectrum = $(this).data('Spectrum');
@@ -151,7 +152,11 @@ var TabManager = /** @class */ (function () {
         name.addClass('item--name');
         name.append(id);
         name.appendTo(h);
+        // message preview
         var mp = $('<div class="item--message-preview">' + msg + '</div>');
+        if (read != undefined && !read) {
+            mp.addClass('item--message-preview--unread');
+        }
         mp.appendTo(h);
         var tag = $('<div/>');
         tag.addClass('item--tag');

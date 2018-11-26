@@ -70,9 +70,9 @@ var FluidMotion = /** @class */ (function () {
         var messages = messageManager.getAllMessages();
         if ((messages.length == 0 || // if first message, or
             (messages.length >= 1 && // last message is defined, and
-                messages[messages.length - 1].sender_id != message.sender_id)) // this message was sent by a different user, and
-            && (message.sender_id != my_id)) {
-            fluidMotion.addUserTag(message.sender_username);
+                messages[messages.length - 1].sender.id != message.sender.id)) // this message was sent by a different user, and
+            && (message.sender.id != my_id)) {
+            fluidMotion.addUserTag(message.sender.username);
         }
         // add the message to list
         messageManager.addMessage(message);
@@ -80,7 +80,7 @@ var FluidMotion = /** @class */ (function () {
         var fluid_element = $('<div/>');
         fluid_element.addClass('message-container');
         // determine if message direction is to or from
-        (message.sender_id == my_id) ? fluid_element.addClass('from') : fluid_element.addClass('to');
+        (message.sender.id == my_id) ? fluid_element.addClass('from') : fluid_element.addClass('to');
         // div.message
         var message_div = $('<div/>');
         message_div.addClass('message');
@@ -129,15 +129,15 @@ var FluidMotion = /** @class */ (function () {
             // before creating the message, check if user tag should be made
             if ((!messages[i - 1] || // if it's the first message in the array or
                 (messages[i - 1] && // check first if not undefined
-                    messages[i - 1].sender_id != messages[i].sender_id)) // this message was sent by a different user
-                && (messages[i].sender_id != my_id)) {
-                fluidMotion.addUserTag(messages[i].sender_username);
+                    messages[i - 1].sender.id != messages[i].sender.id)) // this message was sent by a different user
+                && (messages[i].sender.id != my_id)) {
+                fluidMotion.addUserTag(messages[i].sender.username);
             }
             // div.message-container
             var fluid_element = $('<div/>');
             fluid_element.addClass('message-container');
             // determine if message direction is to or from
-            (messages[i].sender_id == my_id) ? fluid_element.addClass('from') : fluid_element.addClass('to');
+            (messages[i].sender.id == my_id) ? fluid_element.addClass('from') : fluid_element.addClass('to');
             // now to actually construct the DOM element
             // div.message
             var message_div = $('<div/>');

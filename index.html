@@ -46,8 +46,8 @@
 		<!-- <div class="app__menu__top">Settings | Log out </div> -->
 
 		<ul id="tabs">
-			<li><a href="#" name="#tab__people">People</a></li>
 			<li><a href="#" name="#tab__hubs">Hubs</a></li>
+			<li><a href="#" name="#tab__people">People</a></li>
 			<li><a href="#" name="#tab__notifications">Notifications</a></li>
 		</ul>
 
@@ -101,7 +101,7 @@
 
 					<span class="tab--title">Create a Hub</span>
 
-					<form onsubmit="return goManager.cHub(event)" id="create-hub-form" action="">
+					<form onsubmit="return goManager.createHub(event)" id="create-hub-form" action="">
 
 						<!-- Input -->
 						<input id="hub-name" name="hub-name" type="text" placeholder="Name">
@@ -177,15 +177,13 @@
 
 	</div>
 
-
 	<div class="menu__dim"></div>
-
 
 	<div class="app__container">
 
 		<!-- Top bar -->
 		<div class="app__top-bar">
-			<div class="menu__btn" onclick="groupUIManager.showMenu()">
+			<div class="menu__btn" onclick="menuManager.showMenu()">
 				<img class="menu__btn--light" src="images/menu-btn-light.png">
 				<img class="menu__btn--dark" src="images/menu-btn-dark.png">
 			</div>
@@ -216,13 +214,16 @@
 
 	<!-- Scripts -->
 	<script src="js/jquery-3.2.1.min.js"></script>
+
+	<script src="ts-built/go-models.js"></script>
+
 	<script src="ts-built/go-api.js"></script>
 	<script src="ts-built/api.js"></script>
 	<script src="ts-built/app.js"></script>
 	<script src="ts-built/color-fade.js"></script>
 	<script src="ts-built/fluid-motion.js"></script>
 	<script src="ts-built/gradient-factory.js"></script>
-	<script src="ts-built/groups.js"></script>
+	<script src="ts-built/menu.js"></script>
 	<script src="ts-built/messages.js"></script>
 
 	<script src="ts-built/tabs.js"></script>

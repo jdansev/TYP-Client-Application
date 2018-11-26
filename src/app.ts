@@ -1,12 +1,11 @@
 
+
 var my_id;
 var my_token;
 
 
 var tabManager: TabManager;
-
-var groupManager: GroupManager;
-var groupUIManager: GroupUIManager;
+var menuManager: MenuManager;
 var messageManager: MessageManager;
 var messageHandler: MessageHandler;
 var messageUIManager: MessageUIManager;
@@ -26,7 +25,6 @@ window.onload = function() {
 
     electronConfig();
 
-
     var spectrum = {
         'Endless River': ['#43cea2', '#185a9d'],
         'Redish Yellow': ['#f1c40f', '#e74c3c'],
@@ -37,14 +35,14 @@ window.onload = function() {
         'Redgray': ['#f3f3f3','#5B86E5'],
         'Quepal': ['#38ef7d', '#11998e'],
     }
-
     
     messageManager = new MessageManager();
     messageHandler = new MessageHandler();
     messageUIManager = new MessageUIManager();
+    menuManager = new MenuManager();
 
-    groupManager = new GroupManager();
-    groupUIManager = new GroupUIManager();
+    tabManager = new TabManager();
+    tabManager.initialiseTabs();
     
     colorFade = new ColorFade(
         // spectrum['Endless River'],
@@ -59,18 +57,9 @@ window.onload = function() {
 
     fluidMotion = new FluidMotion(Direction.Reversed);
 
-
     goManager = new GoManager();
     goManager.initialise();
     goManager.register('asdf','asdf');
-
-    tabManager = new TabManager();
-    tabManager.initialiseTabs();
-
-    tabManager.initHubPages();
-
-
-
 
     /*Dropdown Menu*/
     $('.dropdown').click(function () {

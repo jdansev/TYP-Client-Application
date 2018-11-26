@@ -6,62 +6,45 @@ class TabManager {
     public initialiseTabs() {
         var self: any = this;
     
-        var myUrl = window.location.href;
-        var myUrlTab = myUrl.substring(myUrl.indexOf("#"));
-        var myUrlTabName = myUrlTab.substring(0,4);
-    
         // hide all content initially
         $("#tab__content > div").hide();
-    
-        // activate the first tab
-        $("#tabs li:first a").attr("id","current");
+
+        // hub create button
+        $("#create-hub").on("click", function() {
+            $("#tab__hubs > div").hide();
+            $("#tab__hubs > div[name='create-hub']").fadeIn();
+        });
 
         // show the first tab contents
-        $("#tab__content > div:first").fadeIn();
+        const firstTab = $('#tabs a:first').attr('name');
+        $(firstTab).fadeIn();
+
+        // activate the first tab
+        $("#tabs li:first a").attr("id","current");
         
+        // on tab click
         $("#tabs a").on("click",function(e) {
 
-            switch ($(this).attr('name')) {
+            self.resetTabs();
+
+            const tabName = $(this).attr('name');
+
+            switch(tabName) {
                 case '#tab__hubs':
                     self.resetHubTab();
                     break;
                 case '#tab__people':
                     self.resetFriendsTab();
                     break;
+                case '#tab__notifications':
+                    break;
                 default:
             }
-    
-            // identify the current tab
-            if ($(this).attr("id") == "current") {
-                return
-            }
-            else {
-                self.resetTabs();
-                $(this).attr("id","current");
-                $($(this).attr('name')).fadeIn();
-            }
+
+            $(tabName).fadeIn();
+            $(this).attr("id","current");
 
         });
-    
-        for (var i = 1; i <= $("#tabs li").length; i++) {
-            if (myUrlTab == myUrlTabName + i) {
-                self.resetTabs();
-                $("a[name='"+myUrlTab+"']").attr("id","current");
-                $(myUrlTab).fadeIn();
-            }
-        }
-
-    }
-
-    public initHubPages() {
-
-        $("#tab__hubs > div").hide();
-        $("#tab__hubs > div[name='hub-main']").show();
-
-        $("#create-hub").on("click", function() {
-            $("#tab__hubs > div").hide();
-            $("#tab__hubs > div[name='create-hub']").fadeIn();
-        })
 
     }
 
@@ -84,7 +67,7 @@ class TabManager {
         goManager.loadHubs();
     }
 
-    private resetTabs(){
+    public resetTabs(){
         // hide all tab content
         $("#tab__content > div").hide();
         // reset id's
@@ -101,7 +84,7 @@ class TabManager {
         $("#list__friends").empty();
     }
 
-    public addItemToFriendList(username) {
+    public addItemToFriendList(user: User) {
 
         /* Structure:
         <div class="list__item">
@@ -116,12 +99,12 @@ class TabManager {
             console.log('friend clicked');
         });
 
-        var jdenticon = $('<svg style="float:left" height="40" width="40" data-jdenticon-value="'+username+'"></svg>');
+        var jdenticon = $('<svg style="float:left" height="40" width="40" data-jdenticon-value="'+user.username+'"></svg>');
         jdenticon.appendTo(f);
 
         var name = $('<span/>');
         name.addClass('item--name');
-        name.append(username);
+        name.append(user.username);
         name.appendTo(f);
 
     }
@@ -131,11 +114,11 @@ class TabManager {
         $("#list__hubs").empty();
     }
 
-    public showHubInfo(hub_info) {
+    public showHubDetails(hub: Hub) {
 
-        console.log(hub_info);
+        console.log(hub);
 
-        $("#hub-info-name").text(hub_info.ID);
+        $("#hub-info-name").text(hub.id);
 
         $("#tab__hubs > div").hide();
         $("#tab__hubs > div[name='hub-info']").fadeIn();
@@ -151,7 +134,7 @@ class TabManager {
 
     }
 
-    public addItemToHubList(id, vis, spec, msg, read) {
+    public addItemToHubList(hub) {
         var self: any = this;
 
         /* Structure:
@@ -164,14 +147,13 @@ class TabManager {
         */
 
         var h = $('<div/>');
-        h.data('id', id);
+        h.data('id', hub.id);
         h.addClass('list__item');
         h.addClass('list__item--hub');
         h.on('click', function() {
-            console.log(h.data('Spectrum'));
             h.find('.item--message-preview').removeClass('item--message-preview--unread');
-            goManager.joinHub(id);
-            groupUIManager.hideMenu();
+            goManager.joinHub(hub.id);
+            menuManager.hideMenu();
             var spectrum = $(this).data('Spectrum');
             colorFade.changeTheme([spectrum.Start, spectrum.End]);
             messageUIManager.setColorScheme(spectrum.End);
@@ -180,8 +162,8 @@ class TabManager {
         var longPress;
         h.on("mousedown",function() {
             longPress = setTimeout(function(){
-                console.log(id);
-                goManager.getHubInfo(id);
+                console.log(hub.id);
+                goManager.getHubInfo(hub.id);
                 // console.log(hub_info);
                 // self.showHubInfo(hub_info);
             }, 600);
@@ -189,17 +171,17 @@ class TabManager {
             clearTimeout(longPress);
         });
 
-        h.data('Spectrum', spec);
-        this.addColorBand(h, spec);
+        h.data('Spectrum', hub.spectrum);
+        this.addColorBand(h, hub.spectrum);
 
         var name = $('<div/>');
         name.addClass('item--name');
-        name.append(id);
+        name.append(hub.id);
         name.appendTo(h);
 
         // message preview
-        var mp = $('<div class="item--message-preview">'+msg+'</div>');
-        if (read != undefined && !read) {
+        var mp = $('<div class="item--message-preview">'+hub.lastMessage+'</div>');
+        if (hub.readLatest != undefined && !hub.readLatest) {
             mp.addClass('item--message-preview--unread');
         }
         mp.appendTo(h);
@@ -207,12 +189,12 @@ class TabManager {
 
         var tag = $('<div/>');
         tag.addClass('item--tag');
-        tag.append(vis);
+        tag.append(hub.visibility);
         tag.appendTo(h);
 
         h.on('mouseenter', function() {
 
-            switch (vis) {
+            switch (hub.visibility) {
                 case "public":
                     tag.addClass('tag--public');
                     break;

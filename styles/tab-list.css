@@ -8,8 +8,8 @@
 }
 
 .list__item--hub:active {
-    transform: scale(.95);
-    transition: 0.1s transform;
+    transform: scale(.97);
+    transition: 0.08s transform;
 }
 
 .list__item {

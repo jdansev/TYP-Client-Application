@@ -1,3 +1,9 @@
+var ipcRenderer = require('electron').ipcRenderer;
+var of = require('rxjs').of;
+var Observable = require('rxjs').Observable;
+var ajax = require('rxjs/ajax').ajax;
+var webSocket = require('rxjs/webSocket').webSocket;
+var _a = require('rxjs/operators'), pipe = _a.pipe, map = _a.map, mergeMap = _a.mergeMap, tap = _a.tap, retry = _a.retry;
 var GoManager = /** @class */ (function () {
     function GoManager() {
     }
@@ -52,7 +58,7 @@ var GoManager = /** @class */ (function () {
                     self.token = data.token;
                     my_token = data.token;
                     my_id = data.id;
-                    self.createHub();
+                    self.createDefaultHub();
                     self.loadHubs();
                     self.loadFriends();
                     // connect the main socket
@@ -90,72 +96,43 @@ var GoManager = /** @class */ (function () {
             }
         });
     };
-    GoManager.prototype.cHub = function (e) {
-        e.preventDefault();
+    GoManager.prototype.createHub = function (e) {
         var self = this;
+        e.preventDefault();
         var visibility = $('input[name=hub-visibility]:checked').attr('id');
-        console.log(visibility);
         var name = $('input[name=hub-name]').val();
-        console.log(name);
         var spec = $('#create-hub-form .dropdown').find('span').data('Spectrum');
-        console.log(spec);
         var url = 'http://localhost:1212/create-hub?token=' + this.token;
-        $.ajax({
-            type: 'POST',
+        ajax({
+            method: 'POST',
             url: url,
-            data: {
+            body: {
                 hub_id: name,
                 hub_visibility: visibility,
                 hub_spec_start: spec[0],
                 hub_spec_end: spec[1],
             },
-            success: function (data, textStatus, xhr) {
-                if (xhr.status != 200) {
-                    console.log(data.responseText);
-                }
-                else {
-                    console.log('hub successfully created');
-                    var js = JSON.parse(data);
-                    console.log(js);
-                }
-            },
-            error: function (data, textStatus, xhr) {
-                console.log(data.responseText);
-            }
-        });
-        return false;
+        })
+            .pipe(map(function (r) { return r.response; }))
+            .subscribe(function (x) { return console.log(x); }, function (err) { return console.log(err); });
     };
-    GoManager.prototype.createHub = function () {
+    GoManager.prototype.createDefaultHub = function () {
         var self = this;
         var hub_id = 'privatehub';
         var visibility = 'private';
         var url = 'http://localhost:1212/create-hub?token=' + this.token;
-        $.ajax({
-            type: 'POST',
+        ajax({
+            method: 'POST',
             url: url,
-            data: {
+            body: {
                 hub_id: hub_id,
                 hub_visibility: visibility,
                 hub_spec_start: '#36D1DC',
                 hub_spec_end: '#5B86E5',
             },
-            success: function (data, textStatus, xhr) {
-                if (xhr.status != 200) {
-                    console.log(data.responseText);
-                }
-                else {
-                    console.log('hub successfully created');
-                    var js = JSON.parse(data);
-                    console.log(js);
-                    self.joinHub(hub_id);
-                }
-            },
-            error: function (data, textStatus, xhr) {
-                console.log(data.responseText);
-                // hub already exists
-                self.joinHub(hub_id);
-            }
-        });
+        })
+            .pipe(map(function (r) { return r.response; }))
+            .subscribe(function (x) { return self.joinHub(x.ID); }, function (err) { return self.joinHub(hub_id); });
     };
     GoManager.prototype.joinHub = function (hub_id) {
         var self = this;
@@ -169,7 +146,6 @@ var GoManager = /** @class */ (function () {
                 var messages = evt.data.split('\n');
                 if (messages.length > 0) {
                     var msg = JSON.parse(messages[0]);
-                    console.log(msg);
                     messageHandler.send(msg);
                 }
                 else {
@@ -179,6 +155,7 @@ var GoManager = /** @class */ (function () {
         });
     };
     GoManager.prototype.waitForSocketConnection = function (socket, callback) {
+        var self = this;
         setTimeout(function () {
             if (socket.readyState === 1) {
                 if (callback != null) {
@@ -188,7 +165,7 @@ var GoManager = /** @class */ (function () {
             }
             else {
                 console.log("Waiting to connect.");
-                this.waitForSocketConnection(socket, callback);
+                self.waitForSocketConnection(socket, callback);
             }
         }, 5); // wait 5 miliseconds
     };
@@ -219,8 +196,9 @@ var GoManager = /** @class */ (function () {
                     var json = JSON.parse(results[0]);
                     tabManager.emptyFriendList();
                     tabManager.resultsCount(json.length, $('#tab__people .results-count'));
-                    for (var user in json) {
-                        tabManager.addItemToFriendList(json[user].Username);
+                    for (var _i = 0, json_1 = json; _i < json_1.length; _i++) {
+                        var user = json_1[_i];
+                        tabManager.addItemToFriendList(decodeUser(user));
                     }
                 }
                 else {
@@ -243,9 +221,9 @@ var GoManager = /** @class */ (function () {
                     $('#create-hub').hide();
                     tabManager.emptyHubList();
                     tabManager.resultsCount(json.length, $('#tab__hubs .results-count'));
-                    for (var _i = 0, json_1 = json; _i < json_1.length; _i++) {
-                        var hub = json_1[_i];
-                        tabManager.addItemToHubList(hub.ID, hub.Visibility, hub.Spectrum, hub.LastMessage, undefined);
+                    for (var _i = 0, json_2 = json; _i < json_2.length; _i++) {
+                        var hub = json_2[_i];
+                        tabManager.addItemToHubList(decodeHub(hub));
                     }
                 }
                 else {
@@ -257,146 +235,76 @@ var GoManager = /** @class */ (function () {
     // Main Socket
     GoManager.prototype.connectMainSocket = function () {
         var self = this;
-        self.mainWS = new WebSocket("ws://localhost:1212/ws/notificationHandler?token=" + self.token);
-        self.waitForSocketConnection(self.mainWS, function () {
-            console.log("Connected to main websocket.");
-            self.mainWS.onmessage = function (evt) {
-                var messages = evt.data.split('\n');
-                var msg = JSON.parse(messages[0]);
-                console.log(msg);
-                switch (msg.Type) {
-                    case "friendRequestReceived":
-                        self.loadFriends();
-                        break;
-                    case "youAcceptedFriendRequest":
-                        self.loadFriends();
-                        // reload notifications
-                        break;
-                    case "requestAccepted":
-                        self.loadFriends();
-                    // reload notifications
-                    case "youDeclinedFriendRequest":
-                        self.loadFriends();
-                    // reload notifications
-                    case "hubMessage":
-                        console.log(msg.Body);
-                        var senderID = msg.Body.Sender.ID;
-                        if (senderID != my_id) {
-                            var notification = new Notification(msg.Body.Sender.Username, {
-                                body: msg.Body.Message
-                            });
-                            notification.onclick = function () {
-                            };
-                        }
-                        self.loadHubs();
-                        break;
-                    default:
-                }
-            };
-        });
-    };
-    // Load Hubs
-    GoManager.prototype.loadHubs = function () {
-        var self = this;
-        $.ajax({
-            type: 'GET',
-            url: "http://localhost:1212/my-hubs?token=" + my_token,
-            success: function (data, textStatus, xhr) {
-                if (xhr.status != 200) {
-                    console.log(data.responseText);
-                }
-                else {
-                    var json = JSON.parse(data);
-                    console.log(json);
-                    tabManager.emptyHubList();
-                    for (var _i = 0, json_2 = json; _i < json_2.length; _i++) {
-                        var hub = json_2[_i];
-                        tabManager.addItemToHubList(hub.Tag.ID, hub.Tag.Visibility, hub.Tag.Spectrum, hub.LastMessage.Message, hub.ReadLatest);
-                    }
-                }
-            },
-            error: function (data, textStatus, xhr) {
-                console.log(data.responseText);
-            }
-        });
-    };
-    GoManager.prototype.getHubInfo = function (hub_id) {
-        var self = this;
-        $.ajax({
-            type: 'GET',
-            url: "http://localhost:1212/hub-info/" + hub_id + "?token=" + my_token,
-            success: function (data, textStatus, xhr) {
-                if (xhr.status != 200) {
-                    console.log(data.responseText);
-                }
-                else {
-                    var json = JSON.parse(data);
-                    console.log(json);
-                    tabManager.showHubInfo(json);
-                }
-            },
-            error: function (data, textStatus, xhr) {
-                console.log(data.responseText);
-            }
-        });
-        return null;
-    };
-    // Load Hub Messages
-    GoManager.prototype.loadHubMessages = function (hub_id) {
-        var self = this;
-        $.ajax({
-            type: 'GET',
-            url: "http://localhost:1212/hub-messages/" + hub_id + "?token=" + my_token,
-            success: function (data, textStatus, xhr) {
-                if (xhr.status != 200) {
-                    console.log(data.responseText);
-                }
-                else {
-                    messageManager.clearMessages();
-                    messageHandler.clearMessages();
-                    var json = JSON.parse(data);
-                    // save messages
-                    for (var m in json) {
-                        var message = json[m];
-                        var new_message = {
-                            message: message.Message,
-                            sender_username: message.Username,
-                            sender_id: message.ID,
-                            sender_token: "",
+        self.mainWS = webSocket("ws://localhost:1212/ws/notificationHandler?token=" + self.token);
+        self.mainWS.pipe(retry())
+            .subscribe(function (n) {
+            switch (n.Type) {
+                case "friendRequestReceived":
+                    self.loadFriends();
+                    break;
+                case "youAcceptedFriendRequest":
+                    self.loadFriends();
+                    break;
+                case "requestAccepted":
+                    self.loadFriends();
+                    break;
+                case "youDeclinedFriendRequest":
+                    self.loadFriends();
+                    break;
+                case "hubMessage":
+                    console.log(n);
+                    var senderID = n.Body.Sender.ID;
+                    if (senderID != my_id) {
+                        var notification = new Notification(n.Body.Hub.ID, {
+                            body: n.Body.Sender.Username + ': ' + n.Body.Message,
+                            silent: true
+                        });
+                        notification.onclick = function () {
+                            ipcRenderer.send('focusWindow', 'main');
                         };
-                        messageManager.addMessage(new_message);
                     }
-                    // load them into the ui
-                    fluidMotion.loadFluidMotionElementsFromArray(messageManager.getAllMessages());
-                }
-            },
-            error: function (data, textStatus, xhr) {
-                console.log(data.responseText);
+                    self.loadHubs();
+                    break;
+                default:
             }
-        });
+        }, function (err) { return console.log(err); });
     };
-    // Load Friends
+    GoManager.prototype.loadHubs = function () {
+        ajax({
+            method: 'GET',
+            url: 'http://localhost:1212/my-hubs?token=' + my_token
+        })
+            .pipe(map(function (r) { return r.response; }), tap(function (x) { return tabManager.emptyHubList(); }), mergeMap(function (s) { return s.slice(); }), map(function (h) { return decodeUserHub(h); }))
+            .subscribe(function (hub) { return tabManager.addItemToHubList(hub); }, function (err) { return console.log(err); });
+    };
+    GoManager.prototype.getHubInfo = function (hid) {
+        ajax({
+            method: 'GET',
+            url: 'http://localhost:1212/hub-info/' + hid + '?token=' + my_token
+        })
+            .pipe(map(function (r) { return r.response; }), map(function (h) { return decodeHub(h); }))
+            .subscribe(function (hub) { return tabManager.showHubDetails(hub); }, function (err) { return console.log(err); });
+    };
+    GoManager.prototype.loadHubMessages = function (hub_id) {
+        ajax({
+            method: 'GET',
+            url: "http://localhost:1212/hub-messages/" + hub_id + "?token=" + my_token
+        })
+            .pipe(map(function (r) { return r.response; }), tap(function () {
+            messageManager.clearMessages();
+            messageHandler.clearMessages();
+        }), mergeMap(function (s) { return s.slice(); }), map(function (m) { return decodeMessage(m); }))
+            .subscribe(function (m) {
+            messageManager.addMessage(m);
+        }, function (err) { return console.log(err); }, function () { return fluidMotion.loadFluidMotionElementsFromArray(messageManager.getAllMessages()); });
+    };
     GoManager.prototype.loadFriends = function () {
-        var self = this;
-        $.ajax({
-            type: 'GET',
+        ajax({
+            method: 'GET',
             url: "http://localhost:1212/my-friends?token=" + my_token,
-            success: function (data, textStatus, xhr) {
-                if (xhr.status != 200) {
-                    console.log(data.responseText);
-                }
-                else {
-                    var json = JSON.parse(data);
-                    tabManager.emptyFriendList();
-                    for (var hub in json) {
-                        tabManager.addItemToFriendList(json[hub].Username);
-                    }
-                }
-            },
-            error: function (data, textStatus, xhr) {
-                console.log(data.responseText);
-            }
-        });
+        })
+            .pipe(map(function (r) { return r.response; }), tap(function (x) { return tabManager.emptyFriendList(); }), mergeMap(function (s) { return s.slice(); }), map(function (u) { return decodeUser(u); }))
+            .subscribe(function (u) { return tabManager.addItemToFriendList(u); }, function (err) { return console.log(err); });
     };
     return GoManager;
 }());

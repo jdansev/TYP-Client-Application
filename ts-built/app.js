@@ -1,8 +1,7 @@
 var my_id;
 var my_token;
 var tabManager;
-var groupManager;
-var groupUIManager;
+var menuManager;
 var messageManager;
 var messageHandler;
 var messageUIManager;
@@ -29,8 +28,9 @@ window.onload = function () {
     messageManager = new MessageManager();
     messageHandler = new MessageHandler();
     messageUIManager = new MessageUIManager();
-    groupManager = new GroupManager();
-    groupUIManager = new GroupUIManager();
+    menuManager = new MenuManager();
+    tabManager = new TabManager();
+    tabManager.initialiseTabs();
     colorFade = new ColorFade(
     // spectrum['Endless River'],
     // spectrum['Redish Yellow'],
@@ -39,9 +39,6 @@ window.onload = function () {
     goManager = new GoManager();
     goManager.initialise();
     goManager.register('asdf', 'asdf');
-    tabManager = new TabManager();
-    tabManager.initialiseTabs();
-    tabManager.initHubPages();
     /*Dropdown Menu*/
     $('.dropdown').click(function () {
         $(this).attr('tabindex', 1).focus();

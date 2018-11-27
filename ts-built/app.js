@@ -38,7 +38,7 @@ window.onload = function () {
     fluidMotion = new FluidMotion(Direction.Reversed);
     goManager = new GoManager();
     goManager.initialise();
-    goManager.register('asdf', 'asdf');
+    goManager.register('qwer', 'qwer');
     /*Dropdown Menu*/
     $('.dropdown').click(function () {
         $(this).attr('tabindex', 1).focus();

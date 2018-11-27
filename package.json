@@ -20,6 +20,7 @@
   "dependencies": {
     "@types/jquery": "^3.3.22",
     "@types/node": "^10.12.10",
-    "rxjs": "^6.3.3"
+    "rxjs": "^6.3.3",
+    "socket.io": "^2.1.1"
   }
 }

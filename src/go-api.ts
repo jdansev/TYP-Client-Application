@@ -1,22 +1,68 @@
 const { ipcRenderer } = require('electron');
 
-const { of } = require('rxjs');
-const { Observable } = require('rxjs');
+const { of, Observer, Observable, Subject } = require('rxjs');
 const { ajax } = require('rxjs/ajax');
 const { webSocket } = require('rxjs/webSocket');
-const { pipe, map, mergeMap, tap, retry } = require('rxjs/operators');
+const { pipe, map, mergeMap, tap, retry, filter, share, defer } = require('rxjs/operators');
+
+
+class WebsocketService {
+
+    private subject: any;
+    private ws: any;
+
+    public connect(URL) {
+        if (!this.subject)
+            this.subject = this.create(URL);
+        return this.subject;
+    }
+
+    private create(URL) {
+        this.ws = new WebSocket(URL);
+        let observable = Observable.create(
+            obs => {
+                this.ws.onmessage = obs.next.bind(obs);
+                this.ws.onerror = obs.error.bind(obs);
+                this.ws.onclose = obs.complete.bind(obs);
+                return this.ws.close.bind(this.ws);
+            }
+        )
+        let observer = {
+            next: (data: Object) => {
+                if (this.ws.readyState === WebSocket.OPEN) {
+                    this.ws.send(JSON.stringify(data));
+                }
+            }
+        }
+        return Subject.create(observer, observable).pipe(
+            map((response: any) => JSON.parse(response.data)),
+            retry(),
+            share()
+        );
+    }
+
+    public close() {
+        this.ws.close();
+        this.subject = null;
+    }
+
+    public send(data) {
+        this.subject.next(data);
+    }
+  
+}
 
 class GoManager {
 
-    ws: any;
     hubSearchWS: any;
     userSearchWS: any;
-
-    mainWS: any;
 
     username: string;
     id: string;
     token: string;
+
+    chatSocket$: WebsocketService;
+    notificationSocket$: WebsocketService;
 
     constructor() {}
 
@@ -66,96 +112,62 @@ class GoManager {
         this.login(u, p);
     }
 
-    public login(u, p) {
-
+    public login(usr, pwd) {
         var self: any = this;
 
-        $.ajax({
-            type: 'POST',
+        ajax({
+            method: 'POST',
             url: 'http://localhost:1212/login',
-            data: { username: u, password: p },
-            success: function(data, textStatus, xhr) {
+            body: { username: usr, password: pwd },
+        })
+        .pipe(
+            map(res => res.response)
+        )
+        .subscribe(
+            ret => {
+                self.username = ret.username;
+                self.id = ret.id;
+                self.token = ret.token;
 
-                if (xhr.status != 200) {
+                my_token = ret.token;
+                my_id = ret.id;
 
-                    console.log(data.responseText);
-
-                } else {
-
-                    console.log(data);
-                    
-                    self.username = data.username;
-                    self.id = data.id;
-                    self.token = data.token;
-
-                    my_token = data.token;
-                    my_id = data.id;
-
-
-                    self.createDefaultHub();
-
-                    self.loadHubs();
-                    self.loadFriends();
-
-                    // connect the main socket
-                    if (self.mainWS == null || self.mainWS.readyState != self.mainWS.OPEN) {
-                        console.log('you are not connected.');
-                        self.connectMainSocket();
-                    }
-
-                }
+                self.createDefaultHub();
+                self.connectMainSocket();
             },
-            error: function(data, textStatus, xhr) {
-                console.log(data.responseText);
-            }
-        });
+            err => console.log(err)
+        );
 
     }
 
-    public register(u, p) {
-
+    public register(usr, pwd) {
         var self: any = this;
 
-        $.ajax({
-            type: 'POST',
+        ajax({
+            method: 'POST',
             url: 'http://localhost:1212/register',
-            data: { username: u, password: p },
-            success: function(data, textStatus, xhr) {
-                if (xhr.status != 200) {
-                    console.log(data.responseText);
-                } else {
-                    var js = JSON.parse(data);
-                    console.log(js);
-
-                    self.login(u, p);
-
-                }
-
+            body: { username: usr, password: pwd },
+        })
+        .pipe(
+            map(res => res.response)
+        )
+        .subscribe(
+            ret => {
+                console.log(ret);
+                self.login(usr, pwd);
             },
-            error: function(data, textStatus, xhr) {
-                console.log(data.responseText);
-
-                // already logged in
-                self.login(u, p);
-
-            }
-        });
-
+            err => self.login(usr, pwd)
+        );
     }
 
     public createHub(e) {
         var self: any = this;
-
         e.preventDefault();
 
         var visibility = $('input[name=hub-visibility]:checked').attr('id');
-
         var name = $('input[name=hub-name]').val();
-
         var spec = $('#create-hub-form .dropdown').find('span').data('Spectrum');
-
         var url = 'http://localhost:1212/create-hub?token=' + this.token;
-
 
         ajax({
             method: 'POST',
@@ -174,7 +186,6 @@ class GoManager {
             x => console.log(x),
             err => console.log(err)
         );
-
     }
 
     public createDefaultHub() {
@@ -182,11 +193,11 @@ class GoManager {
 
         var hub_id = 'privatehub';
         var visibility = 'private';
-        var url = 'http://localhost:1212/create-hub?token=' + this.token;
+        var CREATE_HUB_URL = 'http://localhost:1212/create-hub?token=' + this.token;
 
         ajax({
             method: 'POST',
-            url: url,
+            url: CREATE_HUB_URL,
             body: {
                 hub_id: hub_id,
                 hub_visibility: visibility,
@@ -201,34 +212,20 @@ class GoManager {
             x => self.joinHub(x.ID),
             err => self.joinHub(hub_id)
         );
-
     }
 
     public joinHub(hub_id) {
         var self: any = this;
+        const MESSAGING_URL = 'ws://localhost:1212/ws?token=' + this.token + '&hub=' + hub_id;
 
-        if (this.ws != null) this.ws.close();
+        if (this.chatSocket$) this.chatSocket$.close();
 
-        this.ws = new WebSocket("ws://localhost:1212/ws?token=" + this.token + "&hub=" + hub_id);
-
-        self.waitForSocketConnection(this.ws, function() {
-
-            console.log("Connected.");
-
-            self.loadHubMessages(hub_id);
-
-            self.ws.onmessage = function (evt) {
-
-                var messages = evt.data.split('\n');
-                if (messages.length > 0) {
-                    var msg = JSON.parse(messages[0]);
-                    messageHandler.send(msg);
-                } else {
-                    console.log("error parsing message!");
-                }
-            };
-        });
-
+        this.chatSocket$ = new WebsocketService();
+        this.chatSocket$.connect(MESSAGING_URL)
+        .subscribe(
+            msg => messageHandler.send(msg)
+        );
+        self.loadHubMessages(hub_id)
     }
 
     private waitForSocketConnection(socket, callback){
@@ -249,20 +246,11 @@ class GoManager {
 
     public sendMessage(msg){
         var self: any = this;
-
-        if (self.ws == null) {
-            console.log('you are not connected.');
-            return;
-        }
-
-        self.waitForSocketConnection(self.ws, function() {
-            self.ws.send(JSON.stringify({
-                ID: my_id,
-                username: self.username,
-                Message: msg
-            }));
+        self.chatSocket$.send({
+            ID: my_id,
+            username: self.username,
+            Message: msg
         });
-
     }
 
     // User Search Websocket
@@ -331,53 +319,41 @@ class GoManager {
 
     }
 
+    private notify(n) {
+        let senderID = n.Body.Sender.ID;
+        if (senderID != my_id) {
+            const notification = new Notification(n.Body.Hub.ID, {
+                body: n.Body.Sender.Username + ': ' + n.Body.Message,
+                silent: true
+            });
+            notification.onclick = () => ipcRenderer.send('focusWindow', 'main');
+        }
+    }
+
     // Main Socket
     public connectMainSocket() {
         var self: any = this;
 
-        self.mainWS = webSocket("ws://localhost:1212/ws/notificationHandler?token="+self.token);
-        self.mainWS.pipe(
-            retry(),
-        )
-        .subscribe(
-            n => {
-                switch(n.Type) {
-                    case "friendRequestReceived":
-                        self.loadFriends();
-                        break;
-                    case "youAcceptedFriendRequest":
-                        self.loadFriends();
-                        break;
-                    case "requestAccepted":
-                        self.loadFriends();
-                        break;
-                    case "youDeclinedFriendRequest":
-                        self.loadFriends();
-                        break;
-                    case "hubMessage":
-                        console.log(n);
+        const NOTIFICATION_URL = "ws://localhost:1212/ws/notificationHandler?token=" + self.token;
 
-                        let senderID = n.Body.Sender.ID;
-                        if (senderID != my_id) {
-                            const notification = new Notification(n.Body.Hub.ID, {
-                                body: n.Body.Sender.Username + ': ' + n.Body.Message,
-                                silent: true
-                            });
-                            notification.onclick = () => {
-                                ipcRenderer.send('focusWindow', 'main');
-                            }
+        if (self.notificationSocket$) self.notificationSocket$.close();
 
-                        }
-                        
-                        self.loadHubs();
-                        
-                        break;
-                    default:
-                }
-            },
-            err => console.log(err)
+        self.notificationSocket$ = new WebsocketService();
+        const socket = self.notificationSocket$.connect(NOTIFICATION_URL);
+
+        socket.subscribe(
+            n => console.log(n)
         );
 
+        const receivedHubMessage$ = socket
+        .pipe(filter(res => res.Type == "hubMessage"));
+
+        receivedHubMessage$.subscribe(
+            n => {
+                this.notify(n);
+                self.loadHubs();
+            }
+        );
     }
 
     public loadHubs() {

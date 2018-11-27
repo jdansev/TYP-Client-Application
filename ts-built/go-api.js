@@ -1,9 +1,43 @@
 var ipcRenderer = require('electron').ipcRenderer;
-var of = require('rxjs').of;
-var Observable = require('rxjs').Observable;
+var _a = require('rxjs'), of = _a.of, Observer = _a.Observer, Observable = _a.Observable, Subject = _a.Subject;
 var ajax = require('rxjs/ajax').ajax;
 var webSocket = require('rxjs/webSocket').webSocket;
-var _a = require('rxjs/operators'), pipe = _a.pipe, map = _a.map, mergeMap = _a.mergeMap, tap = _a.tap, retry = _a.retry;
+var _b = require('rxjs/operators'), pipe = _b.pipe, map = _b.map, mergeMap = _b.mergeMap, tap = _b.tap, retry = _b.retry, filter = _b.filter, share = _b.share, defer = _b.defer;
+var WebsocketService = /** @class */ (function () {
+    function WebsocketService() {
+    }
+    WebsocketService.prototype.connect = function (URL) {
+        if (!this.subject)
+            this.subject = this.create(URL);
+        return this.subject;
+    };
+    WebsocketService.prototype.create = function (URL) {
+        var _this = this;
+        this.ws = new WebSocket(URL);
+        var observable = Observable.create(function (obs) {
+            _this.ws.onmessage = obs.next.bind(obs);
+            _this.ws.onerror = obs.error.bind(obs);
+            _this.ws.onclose = obs.complete.bind(obs);
+            return _this.ws.close.bind(_this.ws);
+        });
+        var observer = {
+            next: function (data) {
+                if (_this.ws.readyState === WebSocket.OPEN) {
+                    _this.ws.send(JSON.stringify(data));
+                }
+            }
+        };
+        return Subject.create(observer, observable).pipe(map(function (response) { return JSON.parse(response.data); }), retry(), share());
+    };
+    WebsocketService.prototype.close = function () {
+        this.ws.close();
+        this.subject = null;
+    };
+    WebsocketService.prototype.send = function (data) {
+        this.subject.next(data);
+    };
+    return WebsocketService;
+}());
 var GoManager = /** @class */ (function () {
     function GoManager() {
     }
@@ -41,60 +75,36 @@ var GoManager = /** @class */ (function () {
     GoManager.prototype.setup = function (u, p) {
         this.login(u, p);
     };
-    GoManager.prototype.login = function (u, p) {
+    GoManager.prototype.login = function (usr, pwd) {
         var self = this;
-        $.ajax({
-            type: 'POST',
+        ajax({
+            method: 'POST',
             url: 'http://localhost:1212/login',
-            data: { username: u, password: p },
-            success: function (data, textStatus, xhr) {
-                if (xhr.status != 200) {
-                    console.log(data.responseText);
-                }
-                else {
-                    console.log(data);
-                    self.username = data.username;
-                    self.id = data.id;
-                    self.token = data.token;
-                    my_token = data.token;
-                    my_id = data.id;
-                    self.createDefaultHub();
-                    self.loadHubs();
-                    self.loadFriends();
-                    // connect the main socket
-                    if (self.mainWS == null || self.mainWS.readyState != self.mainWS.OPEN) {
-                        console.log('you are not connected.');
-                        self.connectMainSocket();
-                    }
-                }
-            },
-            error: function (data, textStatus, xhr) {
-                console.log(data.responseText);
-            }
-        });
+            body: { username: usr, password: pwd },
+        })
+            .pipe(map(function (res) { return res.response; }))
+            .subscribe(function (ret) {
+            self.username = ret.username;
+            self.id = ret.id;
+            self.token = ret.token;
+            my_token = ret.token;
+            my_id = ret.id;
+            self.createDefaultHub();
+            self.connectMainSocket();
+        }, function (err) { return console.log(err); });
     };
-    GoManager.prototype.register = function (u, p) {
+    GoManager.prototype.register = function (usr, pwd) {
         var self = this;
-        $.ajax({
-            type: 'POST',
+        ajax({
+            method: 'POST',
             url: 'http://localhost:1212/register',
-            data: { username: u, password: p },
-            success: function (data, textStatus, xhr) {
-                if (xhr.status != 200) {
-                    console.log(data.responseText);
-                }
-                else {
-                    var js = JSON.parse(data);
-                    console.log(js);
-                    self.login(u, p);
-                }
-            },
-            error: function (data, textStatus, xhr) {
-                console.log(data.responseText);
-                // already logged in
-                self.login(u, p);
-            }
-        });
+            body: { username: usr, password: pwd },
+        })
+            .pipe(map(function (res) { return res.response; }))
+            .subscribe(function (ret) {
+            console.log(ret);
+            self.login(usr, pwd);
+        }, function (err) { return self.login(usr, pwd); });
     };
     GoManager.prototype.createHub = function (e) {
         var self = this;
@@ -120,10 +130,10 @@ var GoManager = /** @class */ (function () {
         var self = this;
         var hub_id = 'privatehub';
         var visibility = 'private';
-        var url = 'http://localhost:1212/create-hub?token=' + this.token;
+        var CREATE_HUB_URL = 'http://localhost:1212/create-hub?token=' + this.token;
         ajax({
             method: 'POST',
-            url: url,
+            url: CREATE_HUB_URL,
             body: {
                 hub_id: hub_id,
                 hub_visibility: visibility,
@@ -136,23 +146,13 @@ var GoManager = /** @class */ (function () {
     };
     GoManager.prototype.joinHub = function (hub_id) {
         var self = this;
-        if (this.ws != null)
-            this.ws.close();
-        this.ws = new WebSocket("ws://localhost:1212/ws?token=" + this.token + "&hub=" + hub_id);
-        self.waitForSocketConnection(this.ws, function () {
-            console.log("Connected.");
-            self.loadHubMessages(hub_id);
-            self.ws.onmessage = function (evt) {
-                var messages = evt.data.split('\n');
-                if (messages.length > 0) {
-                    var msg = JSON.parse(messages[0]);
-                    messageHandler.send(msg);
-                }
-                else {
-                    console.log("error parsing message!");
-                }
-            };
-        });
+        var MESSAGING_URL = 'ws://localhost:1212/ws?token=' + this.token + '&hub=' + hub_id;
+        if (this.chatSocket$)
+            this.chatSocket$.close();
+        this.chatSocket$ = new WebsocketService();
+        this.chatSocket$.connect(MESSAGING_URL)
+            .subscribe(function (msg) { return messageHandler.send(msg); });
+        self.loadHubMessages(hub_id);
     };
     GoManager.prototype.waitForSocketConnection = function (socket, callback) {
         var self = this;
@@ -171,16 +171,10 @@ var GoManager = /** @class */ (function () {
     };
     GoManager.prototype.sendMessage = function (msg) {
         var self = this;
-        if (self.ws == null) {
-            console.log('you are not connected.');
-            return;
-        }
-        self.waitForSocketConnection(self.ws, function () {
-            self.ws.send(JSON.stringify({
-                ID: my_id,
-                username: self.username,
-                Message: msg
-            }));
+        self.chatSocket$.send({
+            ID: my_id,
+            username: self.username,
+            Message: msg
         });
     };
     // User Search Websocket
@@ -232,42 +226,32 @@ var GoManager = /** @class */ (function () {
             };
         });
     };
+    GoManager.prototype.notify = function (n) {
+        var senderID = n.Body.Sender.ID;
+        if (senderID != my_id) {
+            var notification = new Notification(n.Body.Hub.ID, {
+                body: n.Body.Sender.Username + ': ' + n.Body.Message,
+                silent: true
+            });
+            notification.onclick = function () { return ipcRenderer.send('focusWindow', 'main'); };
+        }
+    };
     // Main Socket
     GoManager.prototype.connectMainSocket = function () {
+        var _this = this;
         var self = this;
-        self.mainWS = webSocket("ws://localhost:1212/ws/notificationHandler?token=" + self.token);
-        self.mainWS.pipe(retry())
-            .subscribe(function (n) {
-            switch (n.Type) {
-                case "friendRequestReceived":
-                    self.loadFriends();
-                    break;
-                case "youAcceptedFriendRequest":
-                    self.loadFriends();
-                    break;
-                case "requestAccepted":
-                    self.loadFriends();
-                    break;
-                case "youDeclinedFriendRequest":
-                    self.loadFriends();
-                    break;
-                case "hubMessage":
-                    console.log(n);
-                    var senderID = n.Body.Sender.ID;
-                    if (senderID != my_id) {
-                        var notification = new Notification(n.Body.Hub.ID, {
-                            body: n.Body.Sender.Username + ': ' + n.Body.Message,
-                            silent: true
-                        });
-                        notification.onclick = function () {
-                            ipcRenderer.send('focusWindow', 'main');
-                        };
-                    }
-                    self.loadHubs();
-                    break;
-                default:
-            }
-        }, function (err) { return console.log(err); });
+        var NOTIFICATION_URL = "ws://localhost:1212/ws/notificationHandler?token=" + self.token;
+        if (self.notificationSocket$)
+            self.notificationSocket$.close();
+        self.notificationSocket$ = new WebsocketService();
+        var socket = self.notificationSocket$.connect(NOTIFICATION_URL);
+        socket.subscribe(function (n) { return console.log(n); });
+        var receivedHubMessage$ = socket
+            .pipe(filter(function (res) { return res.Type == "hubMessage"; }));
+        receivedHubMessage$.subscribe(function (n) {
+            _this.notify(n);
+            self.loadHubs();
+        });
     };
     GoManager.prototype.loadHubs = function () {
         ajax({

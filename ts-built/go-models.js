@@ -1,12 +1,12 @@
-/* decoders */
-function decodeUser(json) {
+/* Decoders */
+var decodeUser = function (json) {
     return {
         id: json.ID,
         username: json.Username,
         token: '',
     };
-}
-function decodeUserHub(json) {
+};
+var decodeUserHub = function (json) {
     return {
         id: json.Tag.ID,
         visibility: json.Tag.Visibility,
@@ -14,15 +14,15 @@ function decodeUserHub(json) {
         lastMessage: json.LastMessage.Message,
         readLatest: json.ReadLatest,
     };
-}
-function decodeHub(json) {
+};
+var decodeHub = function (json) {
     return {
         id: json.ID,
         visibility: json.Visibility,
         spectrum: json.Spectrum,
     };
-}
-function decodeMessage(json) {
+};
+var decodeMessage = function (json) {
     return {
         sender: {
             id: json.ID,
@@ -31,4 +31,4 @@ function decodeMessage(json) {
         },
         message: json.Message,
     };
-}
+};

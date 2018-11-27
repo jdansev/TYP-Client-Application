@@ -1,6 +1,5 @@
 
 
-
 /* User */
 interface User {
     id: string;
@@ -9,7 +8,7 @@ interface User {
 }
 
 
-/* Hubs */
+/* Hub */
 
 interface Spectrum {
     start: string;
@@ -34,9 +33,10 @@ interface Message {
     message: string;
 }
 
-/* decoders */
 
-function decodeUser(json): User {
+/* Decoders */
+
+var decodeUser = (json): User => {
     return {
         id: json.ID,
         username: json.Username,
@@ -44,7 +44,7 @@ function decodeUser(json): User {
     }
 }
 
-function decodeUserHub(json) {
+var decodeUserHub = (json) => {
     return {
         id: json.Tag.ID,
         visibility: json.Tag.Visibility,
@@ -54,7 +54,7 @@ function decodeUserHub(json) {
     }
 }
 
-function decodeHub(json): Hub {
+var decodeHub = (json): Hub => {
     return {
         id: json.ID,
         visibility: json.Visibility,
@@ -62,7 +62,7 @@ function decodeHub(json): Hub {
     }
 }
 
-function decodeMessage(json) {
+var decodeMessage = (json): Message => {
     return {
         sender: {
             id: json.ID,

@@ -59,7 +59,7 @@ window.onload = function() {
 
     goManager = new GoManager();
     goManager.initialise();
-    goManager.register('asdf','asdf');
+    goManager.register('qwer','qwer');
 
     /*Dropdown Menu*/
     $('.dropdown').click(function () {

@@ -1,7 +1,6 @@
 
 
 class MessageUIManager {
-
     message_input: any;
     send_inner: any;
     send_btn_wrapper: any;
@@ -89,35 +88,22 @@ class MessageUIManager {
 
 class MessageManager {
     messages: Array<Message>;
+
     constructor() { this.messages = new Array<Message>(); }
     public addMessage(message: Message) { this.messages.push(message); }
-
-    public constrainList() {
-        while (this.messages.length > 30) {
-            console.log('splicing');
-            this.messages.shift();
-        }
-    }
-
     public size() { return this.messages.length; }
     public getAllMessages() { return this.messages; }
     public clearMessages() { this.messages = []; }
 }
 
-// NEW
 class MessageHandler {
-    
     message_input: any;
     container: any;
-    socket: any;
-    api_manager: APIManager;
 
     constructor() {
         var self: any = this;
         this.message_input = $( '#message-input' );
         this.container = $( '.messages__container' );
-        this.socket = null;
-        this.api_manager = new APIManager();
         self.bindEnterKeyPress();
     }
 
@@ -134,7 +120,6 @@ class MessageHandler {
     public sendMessage() {
         var self: any = this;
         if (self.message_input.val() == "") return; // validate if not blank
-
         messageUIManager.flyAnimation();
         goManager.sendMessage(self.message_input.val())
     }

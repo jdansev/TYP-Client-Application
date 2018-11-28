@@ -1,4 +1,3 @@
-// NEW
 var MenuManager = /** @class */ (function () {
     function MenuManager() {
         var self = this;
@@ -7,7 +6,6 @@ var MenuManager = /** @class */ (function () {
         self.menu_div = $('.app__menu');
         self.dim = $('.menu__dim');
         self.group_item = $('.group');
-        self.api_manager = new APIManager();
         self.mouse_leave_lock = false;
         self.menu_div.mouseleave(function () {
             (!self.mouse_leave_lock) ? self.hideMenu() : self.mouse_leave_lock = false;

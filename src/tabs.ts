@@ -1,6 +1,4 @@
 
-
-
 class TabManager {
 
     public initialiseTabs() {
@@ -216,7 +214,5 @@ class TabManager {
 
         h.appendTo('#list__hubs');
     }
-
-
 
 }

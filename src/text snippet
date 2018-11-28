@@ -1,8 +1,0 @@
-// messageSubject.next = (data) => {
-        //     if (socket.readyState === WebSocket.OPEN) {
-        //         socket.send(JSON.stringify(data));
-        //         console.log('messsage send successfully');
-        //     } else {
-        //         console.log('socket is not open');
-        //     }
-        // }

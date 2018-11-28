@@ -1,5 +1,3 @@
-
-
 /* User */
 interface User {
     id: string;
@@ -7,9 +5,7 @@ interface User {
     username: string;
 }
 
-
 /* Hub */
-
 interface Spectrum {
     start: string;
     end: string;
@@ -35,7 +31,6 @@ interface Message {
 
 
 /* Decoders */
-
 var decodeUser = (json): User => {
     return {
         id: json.ID,

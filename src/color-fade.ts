@@ -1,6 +1,4 @@
 
-
-
 class ColorFade {
     gradient_factory: GradientFactory;
     container_height: number;

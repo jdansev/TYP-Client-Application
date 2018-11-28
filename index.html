@@ -5,10 +5,6 @@
 	<meta charset="UTF-8">
 	<title>Home</title>
 
-	<!-- Insert these lines above script imports  -->
-	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-	<script>if (window.module) module = window.module;</script>
-
 	<!-- Stylesheets -->
 	<link rel="stylesheet" href="styles/app.css">
 	<link rel="stylesheet" href="styles/tabs.css">
@@ -35,6 +31,36 @@
 			margin-bottom: 10px;
 		}
 
+		.clearfix:before,
+		.clearfix:after {
+			content: ".";    
+			display: block;    
+			height: 0;    
+			overflow: hidden; 
+		}
+		.clearfix:after { clear: both; }
+		.clearfix { zoom: 1; } /* IE < 8 */
+
+		.alert-count {
+			z-index: 99;
+			min-width: 10px;
+			min-height: 10px;
+			line-height: 10px;
+			text-align: center;
+			border-radius: 16px;
+			background-color: #e74c3c;
+			display: inline-block;
+			padding: 2px;
+			font-size: 9px;
+			color: #efefef;
+			font-family: 'Roboto', sans-serif;
+			font-weight: bold;
+			position: absolute;
+			top: -5px;
+			right: 20px;
+			/* border: 1px solid #efefef; */
+		}
+
 	</style>
 
 </head>
@@ -45,10 +71,10 @@
 
 		<!-- <div class="app__menu__top">Settings | Log out </div> -->
 
-		<ul id="tabs">
+		<ul class="clearfix" id="tabs">
 			<li><a href="#" name="#tab__hubs">Hubs</a></li>
 			<li><a href="#" name="#tab__people">People</a></li>
-			<li><a href="#" name="#tab__notifications">Notifications</a></li>
+			<li><a href="#" name="#tab__notifications">Notifications</a><div class="alert-count">1</div></li>
 		</ul>
 
 		<div id="tab__content">
@@ -212,22 +238,21 @@
 
 	</div>
 
+	<!-- Insert these lines above script imports  -->
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+	<script>if (window.module) module = window.module;</script>
+
 	<!-- Scripts -->
 	<script src="js/jquery-3.2.1.min.js"></script>
-
 	<script src="ts-built/go-models.js"></script>
-
 	<script src="ts-built/go-api.js"></script>
-	<script src="ts-built/api.js"></script>
 	<script src="ts-built/app.js"></script>
 	<script src="ts-built/color-fade.js"></script>
 	<script src="ts-built/fluid-motion.js"></script>
 	<script src="ts-built/gradient-factory.js"></script>
 	<script src="ts-built/menu.js"></script>
 	<script src="ts-built/messages.js"></script>
-
 	<script src="ts-built/tabs.js"></script>
-	<script src="ts-built/hub-tab.js"></script>
 
 	<!-- JDenticon -->
 	<script>
@@ -236,9 +261,6 @@
 		};
 	</script>
 	<script type="text/javascript" src="js/jdenticon-2.1.0.min.js"></script>
-
-	<!-- Socket.io -->
-	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script> -->
 	
 </body>
 </html>

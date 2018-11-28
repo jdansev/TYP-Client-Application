@@ -68,25 +68,16 @@ var MessageManager = /** @class */ (function () {
         this.messages = new Array();
     }
     MessageManager.prototype.addMessage = function (message) { this.messages.push(message); };
-    MessageManager.prototype.constrainList = function () {
-        while (this.messages.length > 30) {
-            console.log('splicing');
-            this.messages.shift();
-        }
-    };
     MessageManager.prototype.size = function () { return this.messages.length; };
     MessageManager.prototype.getAllMessages = function () { return this.messages; };
     MessageManager.prototype.clearMessages = function () { this.messages = []; };
     return MessageManager;
 }());
-// NEW
 var MessageHandler = /** @class */ (function () {
     function MessageHandler() {
         var self = this;
         this.message_input = $('#message-input');
         this.container = $('.messages__container');
-        this.socket = null;
-        this.api_manager = new APIManager();
         self.bindEnterKeyPress();
     }
     MessageHandler.prototype.bindEnterKeyPress = function () {

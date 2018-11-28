@@ -264,6 +264,9 @@ input:-ms-input-placeholder {
     right: -400px;
     
     padding: 10px;
+
+    padding-top: 20px;
+
     overflow-y: scroll;
     box-sizing: border-box;
 }

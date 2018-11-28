@@ -14,6 +14,8 @@ var colorFade: ColorFade;
 
 var goManager: GoManager;
 
+var notificationAlertBadge: NotifcationAlertBadge;
+
 
 function electronConfig() {
     // set electron zoom
@@ -60,6 +62,9 @@ window.onload = function() {
     goManager = new GoManager();
     goManager.initialise();
     goManager.register('qwer','qwer');
+
+    notificationAlertBadge = new NotifcationAlertBadge();
+    notificationAlertBadge.setAlertCount(8);
 
     /*Dropdown Menu*/
     $('.dropdown').click(function () {

@@ -8,6 +8,7 @@ var messageUIManager;
 var fluidMotion;
 var colorFade;
 var goManager;
+var notificationAlertBadge;
 function electronConfig() {
     // set electron zoom
     var webFrame = require('electron').webFrame;
@@ -39,6 +40,8 @@ window.onload = function () {
     goManager = new GoManager();
     goManager.initialise();
     goManager.register('qwer', 'qwer');
+    notificationAlertBadge = new NotifcationAlertBadge();
+    notificationAlertBadge.setAlertCount(8);
     /*Dropdown Menu*/
     $('.dropdown').click(function () {
         $(this).attr('tabindex', 1).focus();

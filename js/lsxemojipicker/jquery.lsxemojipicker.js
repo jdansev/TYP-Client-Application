@@ -771,7 +771,7 @@ if(typeof jQuery !== 'undefined'){
                     if(container.is(':visible')){
                         container.hide();
                     } else {
-                        container.fadeIn();
+                        container.show();
                     }
                 }
             });

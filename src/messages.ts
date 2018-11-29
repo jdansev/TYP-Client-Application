@@ -122,6 +122,9 @@ class MessageHandler {
         if (self.message_input.val() == "") return; // validate if not blank
         messageUIManager.flyAnimation();
         goManager.sendMessage(self.message_input.val())
+
+        // TODO: put this into an emoji-picker class
+        $('.lsx-emojipicker-container').hide();
     }
 
     public send(msg) {

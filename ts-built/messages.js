@@ -95,6 +95,8 @@ var MessageHandler = /** @class */ (function () {
             return; // validate if not blank
         messageUIManager.flyAnimation();
         goManager.sendMessage(self.message_input.val());
+        // TODO: put this into an emoji-picker class
+        $('.lsx-emojipicker-container').hide();
     };
     MessageHandler.prototype.send = function (msg) {
         fluidMotion.loadFluidMotionElement(decodeMessage(msg));

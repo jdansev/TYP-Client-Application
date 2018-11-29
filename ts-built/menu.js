@@ -25,6 +25,8 @@ var MenuManager = /** @class */ (function () {
         });
         tabManager.resetHubTab();
         tabManager.resetFriendsTab();
+        // TODO: put this into an emoji-picker class
+        $('.lsx-emojipicker-container').hide();
     };
     MenuManager.prototype.hideMenu = function () {
         var self = this;

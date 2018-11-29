@@ -251,6 +251,8 @@ var GoManager = /** @class */ (function () {
         receivedHubMessage$.subscribe(function (n) {
             _this.notify(n);
             self.loadHubs();
+            //TODO: only increment if hub tab isn't already opened
+            hubAlertBadge.incrementAlertCount();
         });
     };
     GoManager.prototype.loadHubs = function () {

@@ -9,6 +9,8 @@ var fluidMotion;
 var colorFade;
 var goManager;
 var notificationAlertBadge;
+var hubAlertBadge;
+var peopleAlertBadge;
 function electronConfig() {
     // set electron zoom
     var webFrame = require('electron').webFrame;
@@ -39,9 +41,14 @@ window.onload = function () {
     fluidMotion = new FluidMotion(Direction.Reversed);
     goManager = new GoManager();
     goManager.initialise();
-    goManager.register('qwer', 'qwer');
-    notificationAlertBadge = new NotifcationAlertBadge();
-    notificationAlertBadge.setAlertCount(8);
+    goManager.register('asdf', 'asdf');
+    hubAlertBadge = new AlertBadge($('#hub-alert-badge'));
+    peopleAlertBadge = new AlertBadge($('#people-alert-badge'));
+    notificationAlertBadge = new AlertBadge($('#notification-alert-badge'));
+    hubAlertBadge.incrementAlertCount();
+    peopleAlertBadge.setAlertCount(5);
+    peopleAlertBadge.incrementAlertCount();
+    notificationAlertBadge.incrementAlertCount();
     /*Dropdown Menu*/
     $('.dropdown').click(function () {
         $(this).attr('tabindex', 1).focus();

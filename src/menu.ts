@@ -18,9 +18,9 @@ class MenuManager {
 
         self.mouse_leave_lock = false;
 
-        self.menu_div.mouseleave(function() {
-            (!self.mouse_leave_lock) ? self.hideMenu() : self.mouse_leave_lock = false;
-        });
+        // self.menu_div.mouseleave(function() {
+        //     (!self.mouse_leave_lock) ? self.hideMenu() : self.mouse_leave_lock = false;
+        // });
     }
 
     public showMenu() {

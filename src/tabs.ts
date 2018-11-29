@@ -30,11 +30,14 @@ class TabManager {
             switch(tabName) {
                 case '#tab__hubs':
                     self.resetHubTab();
+                    hubAlertBadge.clearAlertCount();
                     break;
                 case '#tab__people':
                     self.resetFriendsTab();
+                    peopleAlertBadge.clearAlertCount();
                     break;
                 case '#tab__notifications':
+                    notificationAlertBadge.clearAlertCount();
                     break;
                 default:
             }

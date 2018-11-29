@@ -7,9 +7,9 @@ var MenuManager = /** @class */ (function () {
         self.dim = $('.menu__dim');
         self.group_item = $('.group');
         self.mouse_leave_lock = false;
-        self.menu_div.mouseleave(function () {
-            (!self.mouse_leave_lock) ? self.hideMenu() : self.mouse_leave_lock = false;
-        });
+        // self.menu_div.mouseleave(function() {
+        //     (!self.mouse_leave_lock) ? self.hideMenu() : self.mouse_leave_lock = false;
+        // });
     }
     MenuManager.prototype.showMenu = function () {
         this.mouse_leave_lock = false;

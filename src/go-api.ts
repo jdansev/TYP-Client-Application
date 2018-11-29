@@ -352,6 +352,8 @@ class GoManager {
             n => {
                 this.notify(n);
                 self.loadHubs();
+                //TODO: only increment if hub tab isn't already opened
+                hubAlertBadge.incrementAlertCount();
             }
         );
     }

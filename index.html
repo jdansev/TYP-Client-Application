@@ -31,14 +31,14 @@
 			margin-bottom: 10px;
 		}
 
-		#notification-alert-badge {
+		.alert-badge {
 			z-index: 99;
 			min-width: 10px;
 			min-height: 10px;
 			line-height: 10px;
 			text-align: center;
 			border-radius: 16px;
-			background-color: #e74c3c;
+			background-color: #ff4d4d;
 			display: inline-block;
 			padding: 2px;
 			font-size: 9px;
@@ -52,6 +52,29 @@
 			visibility: hidden;
 		}
 
+		.app__menu__top {
+			font-family: 'Roboto', sans-serif;
+			font-size: 12px;
+			color: #3d3d3d; /* baltic sea */
+			display: block;
+			width: 100%;
+			/* border: 1px solid #000; */
+			margin-bottom: 15px;
+		}
+
+		.app__menu__top--options {
+			float: right;
+		}
+
+		.app__menu__top--options .option {
+			margin: 0 5px;
+		}
+
+		.app__menu__top--options .option:hover {
+			cursor: pointer;
+			color: gray;
+		}
+
 	</style>
 
 </head>
@@ -60,12 +83,20 @@
 
 	<div class="app__menu">
 
-		<!-- <div class="app__menu__top">Settings | Log out </div> -->
+		<div class="app__menu__top">
+			<div style="float: left" class="app__menu__top--options">
+				<span class="option">Profile</span>
+			</div>
+			<div style="float: right" class="app__menu__top--options">
+				<span class="option">Settings</span> | 
+				<span class="option">Logout</span>
+			</div>
+		</div>
 
 		<ul class="clearfix" id="tabs">
-			<li><a href="#" name="#tab__hubs">Hubs</a></li>
-			<li><a href="#" name="#tab__people">People</a></li>
-			<li><a href="#" name="#tab__notifications">Notifications</a><div id="notification-alert-badge">1</div></li>
+			<li><a href="#" name="#tab__hubs">Hubs</a><div id="hub-alert-badge" class="alert-badge"></div></li>
+			<li><a href="#" name="#tab__people">People</a><div id="people-alert-badge" class="alert-badge"></div></li>
+			<li><a href="#" name="#tab__notifications">Notifications</a><div id="notification-alert-badge" class="alert-badge"></div></li>
 		</ul>
 
 		<div id="tab__content">
@@ -218,6 +249,14 @@
 		<div class="app__message-input">
 
 			<input id="message-input" type="text" placeholder="TYP." spellcheck="false">
+			
+			<!-- <div class="emoji-picker">
+				<button class="emoji-icon"></button>
+			</div> -->
+
+			<button class="emoji-picker">
+				<div class="emoji-icon"></div>
+			</button>
 
 			<div class="btn__send-wrapper">
 				<div class="btn__send">
@@ -253,6 +292,65 @@
 		};
 	</script>
 	<script type="text/javascript" src="js/jdenticon-2.1.0.min.js"></script>
+
+	<!-- Twemoji JS -->
+	<script src="js/twemoji.min.js"></script>
+	<script src="js/lsxemojipicker/jquery.lsxemojipicker.js"></script>
+	
+	<!-- Twemoji style -->
+	<!-- TODO: change to styles -->
+	<link rel="stylesheet" href="js/lsxemojipicker/jquery.lsxemojipicker.css">
+
+	<script>
+
+		$('.emoji-picker').lsxEmojiPicker({
+			width: 420,
+			height: 120,
+			twemoji: false,
+			onSelect: function(emoji) {
+
+				var emoji = findSurrogatePair(emoji.value.replace("&#x", "0x"))
+				.map((el) => parseInt(el, 16))
+				.map((el) => String.fromCharCode(el))
+				.join('');
+
+				insertAtCaret($('#message-input').get(0), emoji);
+			}
+		});
+
+		function findSurrogatePair(point) {
+			// assumes code point > 0xffff
+			var offset = point - 0x10000,
+				lead = 0xd800 + (offset >> 10),
+				trail = 0xdc00 + (offset & 0x3ff); 
+			return [lead.toString(16), trail.toString(16)];
+		}
+
+		function insertAtCaret(inputField, myValue) {
+			if (document.selection) {
+				// Internet Explorer compatible
+				inputField.focus();
+				var sel = document.selection.createRange();
+				sel.text = myValue;
+				inputField.focus();
+			}
+			else if (inputField.selectionStart || inputField.selectionStart == '0') {
+				// Firefox and Webkit compatible
+				var startPos = inputField.selectionStart;
+				var endPos = inputField.selectionEnd;
+				var scrollTop = inputField.scrollTop;
+				inputField.value = inputField.value.substring(0, startPos)+myValue+inputField.value.substring(endPos,inputField.value.length);
+				inputField.focus();
+				inputField.selectionStart = startPos + myValue.length;
+				inputField.selectionEnd = startPos + myValue.length;
+				inputField.scrollTop = scrollTop;
+			} else {
+				inputField.focus();
+				inputField.value += myValue;
+			}
+		}
+	</script>
+
 	
 </body>
 </html>

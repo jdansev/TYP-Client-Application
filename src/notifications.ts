@@ -1,25 +1,41 @@
 
 
-class NotifcationAlertBadge {
-    notificationBadgeElement: any;
+class AlertBadge {
+    alertBadgeElement: any;
+    alertCount: number;
 
-    constructor() {
+    constructor(element: any) {
         var self: any = this;
-        self.notificationBadgeElement = $( '#notification-alert-badge' );
+        self.alertCount = 0;
+        self.alertBadgeElement = element;
+    }
+
+    incrementAlertCount() {
+        var self: any = this;
+        self.setAlertCount(++self.alertCount);
     }
 
     setAlertCount(n) {
         var self: any = this;
+        self.alertCount = n;
         if (n > 0) {
-            self.notificationBadgeElement.css({
+            self.alertBadgeElement.css({
                 'visibility': 'visible'
             });
-            self.notificationBadgeElement.html(n);
+            self.alertBadgeElement.html(self.alertCount);
         } else {
-            self.notificationBadgeElement.css({
+            self.alertBadgeElement.css({
                 'visibility': 'hidden'
             });
         }
+    }
+
+    clearAlertCount() {
+        var self: any = this;
+        self.alertBadgeElement.css({
+            'visibility': 'hidden'
+        });
+        self.setAlertCount(0);
     }
 
 }

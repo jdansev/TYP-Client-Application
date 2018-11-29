@@ -14,7 +14,9 @@ var colorFade: ColorFade;
 
 var goManager: GoManager;
 
-var notificationAlertBadge: NotifcationAlertBadge;
+var notificationAlertBadge: AlertBadge;
+var hubAlertBadge: AlertBadge;
+var peopleAlertBadge: AlertBadge;
 
 
 function electronConfig() {
@@ -61,10 +63,15 @@ window.onload = function() {
 
     goManager = new GoManager();
     goManager.initialise();
-    goManager.register('qwer','qwer');
+    goManager.register('asdf','asdf');
 
-    notificationAlertBadge = new NotifcationAlertBadge();
-    notificationAlertBadge.setAlertCount(8);
+    hubAlertBadge = new AlertBadge($( '#hub-alert-badge' ));
+    peopleAlertBadge = new AlertBadge($( '#people-alert-badge' ))
+    notificationAlertBadge = new AlertBadge($( '#notification-alert-badge' ));
+    hubAlertBadge.incrementAlertCount();
+    peopleAlertBadge.setAlertCount(5);
+    peopleAlertBadge.incrementAlertCount();
+    notificationAlertBadge.incrementAlertCount();
 
     /*Dropdown Menu*/
     $('.dropdown').click(function () {

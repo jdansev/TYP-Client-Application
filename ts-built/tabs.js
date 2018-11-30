@@ -1,7 +1,7 @@
 var TabManager = /** @class */ (function () {
     function TabManager() {
     }
-    TabManager.prototype.initialiseTabs = function () {
+    TabManager.prototype.createTabs = function () {
         var self = this;
         // hide all content initially
         $("#tab__content > div").hide();

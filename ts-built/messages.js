@@ -49,7 +49,6 @@ var MessageUIManager = /** @class */ (function () {
         var self = this;
         if (!(self.message_input.val()))
             return; // check that input is not empty
-        // fly animation
         $('.btn__send').stop().animate({
             opacity: 0,
             top: "-=40px",
@@ -95,8 +94,7 @@ var MessageHandler = /** @class */ (function () {
             return; // validate if not blank
         messageUIManager.flyAnimation();
         goManager.sendMessage(self.message_input.val());
-        // TODO: put this into an emoji-picker class
-        $('.lsx-emojipicker-container').hide();
+        emojiPicker.hideEmojiPicker();
     };
     MessageHandler.prototype.send = function (msg) {
         fluidMotion.loadFluidMotionElement(decodeMessage(msg));

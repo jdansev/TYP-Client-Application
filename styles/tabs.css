@@ -1,4 +1,6 @@
 
+
+/* Main Menu Tabs */
 .clearfix:before,
 .clearfix:after {
     content: ".";    
@@ -13,7 +15,6 @@
     width: 100%;
     margin: 0;
     padding: 0;
-    /* overflow: hidden; */
     list-style: none;
     font-family: 'Roboto', sans-serif;
     font-size: 12px;
@@ -33,19 +34,15 @@
     line-height: 24px;
     text-transform: uppercase;
     text-decoration: none;
-
     color: black;
-
     border-right: 20px solid transparent;
     border-bottom: 22px solid #3D3D3D;
-
     border-bottom-color: rgba(180,180,180,0.5);
     margin-right: 6px;
 }
 
 #tabs a:hover,
 #tabs a:focus {
-  /* border-bottom-color: rgba(180,180,180,0.7); */
   color: dimgray;
   transition: all 0.05s;
 }
@@ -61,14 +58,11 @@
   transition: all 0.1s;
 }
 
-/* ----------- */
+/* Tab Menu Contents */
 #tab__content {
-
     font-family: 'Roboto', sans-serif;
-
     background: transparent;
     border-top: 2px solid rgba(30,30,30,0.6);
-
     padding: 12px;
     padding-top: 1.5em;
 }

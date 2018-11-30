@@ -1,0 +1,22 @@
+
+/* Alert Badge */
+.alert-badge {
+    z-index: 99;
+    min-width: 10px;
+    min-height: 10px;
+    line-height: 10px;
+    text-align: center;
+    border-radius: 16px;
+    background-color: #e74c3c;
+    display: inline-block;
+    padding: 2px;
+    font-size: 9px;
+    color: #efefef;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    position: absolute;
+    top: -5px;
+    right: 20px;
+    visibility: hidden;
+    opacity: .9;
+}

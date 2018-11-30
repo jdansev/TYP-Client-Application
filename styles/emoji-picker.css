@@ -1,0 +1,28 @@
+
+/* Emoji Picker */
+.emoji-picker {
+    outline: none;
+    height: 35px;
+    width: 35px;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: transparent;
+    border: none;
+}
+
+.emoji-icon {
+    margin: 0 auto;
+    height: 55%;
+    width: 55%;
+    opacity: .1;
+    background-image: url('../images/smiley-emoji.png');
+    background-size: contain;
+    box-sizing: border-box;
+}
+
+.emoji-icon:hover {
+    opacity: .4;
+    cursor: pointer;
+}

@@ -39,8 +39,7 @@ class MenuManager {
         tabManager.resetHubTab();
         tabManager.resetFriendsTab();
 
-        // TODO: put this into an emoji-picker class
-        $('.lsx-emojipicker-container').hide();
+        emojiPicker.hideEmojiPicker();
     }
 
     public hideMenu() {

@@ -2,30 +2,18 @@
 /* Hub Name */
 #hub-name {
     height: 25px;
-    /* font-family: Arial, Helvetica, sans-serif; */
     font-family: Roboto;
     font-size: 16px;
     line-height: 12px;
-
     padding: 10px;
     border: none;
     outline: none;
     width: 80%;
     margin: 20px 0px;
     border-radius: 10px;
-
     border: 1px solid dimgray;
-
     background: rgba(255, 255, 255, 0.6);
 }
-
-
-/* Buttons */
-
-/* .typ__btn {
-    margin-top: 10px;
-} */
-
 
 
 /* Radios */
@@ -36,10 +24,8 @@
 
 .radio-pair {
     display: inline-block;
-    /* font-family: Avenir; */
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
-    /* font-weight: bold; */
     color: dimgray;
     margin-right: 8px;
 }
@@ -107,10 +93,6 @@ input[type=radio]:not(:checked) + label:after {
 input[type=radio]:checked + label:after {
     opacity: 1;
 }
-
-
-
-
 
 
 /* Dropdown */

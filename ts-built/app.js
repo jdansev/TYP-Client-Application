@@ -11,6 +11,7 @@ var goManager;
 var notificationAlertBadge;
 var hubAlertBadge;
 var peopleAlertBadge;
+var emojiPicker;
 function electronConfig() {
     // set electron zoom
     var webFrame = require('electron').webFrame;
@@ -33,14 +34,14 @@ window.onload = function () {
     messageUIManager = new MessageUIManager();
     menuManager = new MenuManager();
     tabManager = new TabManager();
-    tabManager.initialiseTabs();
+    tabManager.createTabs();
     colorFade = new ColorFade(
     // spectrum['Endless River'],
     // spectrum['Redish Yellow'],
     spectrum['Vivid']);
     fluidMotion = new FluidMotion(Direction.Reversed);
     goManager = new GoManager();
-    goManager.initialise();
+    goManager.start();
     goManager.register('asdf', 'asdf');
     hubAlertBadge = new AlertBadge($('#hub-alert-badge'));
     peopleAlertBadge = new AlertBadge($('#people-alert-badge'));
@@ -49,6 +50,8 @@ window.onload = function () {
     peopleAlertBadge.setAlertCount(5);
     peopleAlertBadge.incrementAlertCount();
     notificationAlertBadge.incrementAlertCount();
+    emojiPicker = new EmojiPicker($('.emoji-picker'), $('#message-input'));
+    emojiPicker.createEmojiPicker();
     /*Dropdown Menu*/
     $('.dropdown').click(function () {
         $(this).attr('tabindex', 1).focus();

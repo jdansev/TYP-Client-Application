@@ -70,7 +70,6 @@ class MessageUIManager {
 
         if (!(self.message_input.val())) return; // check that input is not empty
 
-        // fly animation
         $('.btn__send').stop().animate({
             opacity: 0,
             top: "-=40px",
@@ -107,7 +106,7 @@ class MessageHandler {
         self.bindEnterKeyPress();
     }
 
-    private bindEnterKeyPress() {
+    public bindEnterKeyPress() {
         var self: any = this;
         $(document).keypress(function(e) {
             if (e.which == 13) { // when enter key is pressed
@@ -123,8 +122,7 @@ class MessageHandler {
         messageUIManager.flyAnimation();
         goManager.sendMessage(self.message_input.val())
 
-        // TODO: put this into an emoji-picker class
-        $('.lsx-emojipicker-container').hide();
+        emojiPicker.hideEmojiPicker();
     }
 
     public send(msg) {
@@ -135,7 +133,7 @@ class MessageHandler {
         this.container.html('');
     }
 
-    private clearInput() {
+    public clearInput() {
         this.message_input.val('');
     }
     

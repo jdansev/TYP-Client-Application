@@ -1,3 +1,4 @@
+// Notifications
 var AlertBadge = /** @class */ (function () {
     function AlertBadge(element) {
         var self = this;

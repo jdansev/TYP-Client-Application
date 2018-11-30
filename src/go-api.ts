@@ -1,13 +1,12 @@
 const { ipcRenderer } = require('electron');
 
-const { of, Observer, Observable, Subject } = require('rxjs');
+const { of, Observer, Observable, Subject, fromEvent } = require('rxjs');
 const { ajax } = require('rxjs/ajax');
 const { webSocket } = require('rxjs/webSocket');
-const { pipe, map, mergeMap, tap, retry, filter, share, defer } = require('rxjs/operators');
+const { pipe, map, mergeMap, tap, retry, filter, share, defer, flatMap, debounce, debounceTime, distinctUntilChanged } = require('rxjs/operators');
 
 
 class WebsocketService {
-
     private subject: any;
     private ws: any;
 
@@ -19,6 +18,7 @@ class WebsocketService {
 
     private create(URL) {
         this.ws = new WebSocket(URL);
+        this.ws.onopen = () => console.log('connected successfully to ' + URL);
         let observable = Observable.create(
             obs => {
                 this.ws.onmessage = obs.next.bind(obs);
@@ -64,48 +64,56 @@ class GoManager {
     chatSocket$: WebsocketService;
     notificationSocket$: WebsocketService;
 
+    hubSearchSocket$: WebsocketService;
+
     constructor() {}
 
-    public initialise() {
+    public start() {
         var self: any = this;
 
-        // hub search
-        $("#hub-search").keyup(function(e) {
+        /* Hub search */
+        fromEvent($( '#hub-search' ).get(0), 'keyup')
+        .pipe(
+            map(e => e.target.value),
+        )
+        .subscribe(
+            x => {
+                if (x == '') {
+                    tabManager.resetHubTab();
+                    return;
+                }
 
-            if ($('#hub-search').val() == '') {
-                tabManager.resetHubTab();
-                return;
+                if (self.hubSearchWS == null || self.hubSearchWS.readyState != self.hubSearchWS.OPEN) {
+                    console.log('you are not connected.');
+                    self.connectHubSearchWebsocket();
+                }
+                self.waitForSocketConnection(self.hubSearchWS, function() {
+                    self.hubSearchWS.send(x);
+                });
             }
+        );
 
-            if (self.hubSearchWS == null || self.hubSearchWS.readyState != self.hubSearchWS.OPEN) {
-                console.log('you are not connected.');
-                self.connectHubSearchWebsocket();
+        /* User search */
+        fromEvent($( '#user-search' ).get(0), 'keyup')
+        .pipe(
+            map(e => e.target.value),
+        )
+        .subscribe(
+            x => {
+                if (x == '') {
+                    tabManager.resetFriendsTab();
+                    return;
+                }
+                if (self.userSearchWS == null || self.userSearchWS.readyState != self.userSearchWS.OPEN) {
+                    console.log('you are not connected.');
+                    self.connectUserSearchWebsocket();
+                }
+                self.waitForSocketConnection(self.userSearchWS, function() {
+                    self.userSearchWS.send(x);
+                });
             }
+        );
 
-            self.waitForSocketConnection(self.hubSearchWS, function() {
-                self.hubSearchWS.send($('#hub-search').val());
-            });
-
-        });
-
-        // user search
-        $("#user-search").keyup(function(e) {
-
-            if ($('#user-search').val() == '') {
-                tabManager.resetFriendsTab();
-                return;
-            }
-
-            if (self.userSearchWS == null || self.userSearchWS.readyState != self.userSearchWS.OPEN) {
-                console.log('you are not connected.');
-                self.connectUserSearchWebsocket();
-            }
-
-            self.waitForSocketConnection(self.userSearchWS, function() {
-                self.userSearchWS.send($('#user-search').val());
-            });
-
-        });
     }
 
     public setup(u, p) {

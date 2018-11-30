@@ -1,7 +1,7 @@
 
 class TabManager {
 
-    public initialiseTabs() {
+    public createTabs() {
         var self: any = this;
     
         // hide all content initially

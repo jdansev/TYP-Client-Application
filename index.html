@@ -5,12 +5,14 @@
 	<meta charset="UTF-8">
 	<title>Home</title>
 
-	<!-- Stylesheets -->
+	<!-- Styles -->
 	<link rel="stylesheet" href="styles/app.css">
 	<link rel="stylesheet" href="styles/tabs.css">
-	<link rel="stylesheet" href="styles/tab-list.css">
-	<link rel="stylesheet" href="styles/search-bar.css">
 	<link rel="stylesheet" href="styles/form-elements.css">
+	<link rel="stylesheet" href="styles/emoji-picker.css">
+	<link rel="stylesheet" href="styles/alert-badge.css">
+	<link rel="stylesheet" href="styles/jquery.lsxemojipicker.css">
+	<link rel="stylesheet" href="styles/menu-elements.css">
 
 	<!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -29,27 +31,6 @@
 			color: dimgray;
 			font-size: 14px;
 			margin-bottom: 10px;
-		}
-
-		.alert-badge {
-			z-index: 99;
-			min-width: 10px;
-			min-height: 10px;
-			line-height: 10px;
-			text-align: center;
-			border-radius: 16px;
-			background-color: #ff4d4d;
-			display: inline-block;
-			padding: 2px;
-			font-size: 9px;
-			color: #efefef;
-			font-family: 'Roboto', sans-serif;
-			font-weight: bold;
-			position: absolute;
-			top: -5px;
-			right: 20px;
-			/* border: 1px solid #efefef; */
-			visibility: hidden;
 		}
 
 		.app__menu__top {
@@ -105,7 +86,7 @@
 
 				<img src="images/search-icon.svg" class="search-icon"> <input class="search-bar" id="user-search" type="text">
 
-				<div class="head">
+				<div class="tab__head">
 					<span id="friends__title" class="tab--title">Your Friends</span>
 				</div>
 
@@ -122,7 +103,7 @@
 
 					<img src="images/search-icon.svg" class="search-icon"> <input id="hub-search" class="search-bar" value="" type="text">
 
-					<div class="head">
+					<div class="tab__head">
 						<span id="hubs__title" class="tab--title">Your Hubs</span>
 						<span id="create-hub">+</span>
 					</div>
@@ -272,8 +253,22 @@
 	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 	<script>if (window.module) module = window.module;</script>
 
-	<!-- Scripts -->
+	<!-- JQuery -->
 	<script src="js/jquery-3.2.1.min.js"></script>
+
+	<!-- JDenticon -->
+	<script type="text/javascript" src="js/jdenticon-2.1.0.min.js"></script>
+	<script>
+		window.jdenticon_config = {
+			replaceMode: "observe"
+		};
+	</script>
+
+	<!-- Twemoji JS -->
+	<script src="js/twemoji.min.js"></script>
+	<script src="js/jquery.lsxemojipicker.js"></script>
+
+	<!-- Scripts -->
 	<script src="ts-built/go-models.js"></script>
 	<script src="ts-built/go-api.js"></script>
 	<script src="ts-built/app.js"></script>
@@ -284,71 +279,11 @@
 	<script src="ts-built/messages.js"></script>
 	<script src="ts-built/tabs.js"></script>
 	<script src="ts-built/notifications.js"></script>
-
-	<!-- JDenticon -->
-	<script>
-		window.jdenticon_config = {
-			replaceMode: "observe"
-		};
-	</script>
-	<script type="text/javascript" src="js/jdenticon-2.1.0.min.js"></script>
-
-	<!-- Twemoji JS -->
-	<script src="js/twemoji.min.js"></script>
-	<script src="js/lsxemojipicker/jquery.lsxemojipicker.js"></script>
-	
-	<!-- Twemoji style -->
-	<!-- TODO: change to styles -->
-	<link rel="stylesheet" href="js/lsxemojipicker/jquery.lsxemojipicker.css">
+	<script src="ts-built/emoji-picker.js"></script>
 
 	<script>
 
-		$('.emoji-picker').lsxEmojiPicker({
-			width: 420,
-			height: 120,
-			twemoji: false,
-			onSelect: function(emoji) {
-
-				var emoji = findSurrogatePair(emoji.value.replace("&#x", "0x"))
-				.map((el) => parseInt(el, 16))
-				.map((el) => String.fromCharCode(el))
-				.join('');
-
-				insertAtCaret($('#message-input').get(0), emoji);
-			}
-		});
-
-		function findSurrogatePair(point) {
-			// assumes code point > 0xffff
-			var offset = point - 0x10000,
-				lead = 0xd800 + (offset >> 10),
-				trail = 0xdc00 + (offset & 0x3ff); 
-			return [lead.toString(16), trail.toString(16)];
-		}
-
-		function insertAtCaret(inputField, myValue) {
-			if (document.selection) {
-				// Internet Explorer compatible
-				inputField.focus();
-				var sel = document.selection.createRange();
-				sel.text = myValue;
-				inputField.focus();
-			}
-			else if (inputField.selectionStart || inputField.selectionStart == '0') {
-				// Firefox and Webkit compatible
-				var startPos = inputField.selectionStart;
-				var endPos = inputField.selectionEnd;
-				var scrollTop = inputField.scrollTop;
-				inputField.value = inputField.value.substring(0, startPos)+myValue+inputField.value.substring(endPos,inputField.value.length);
-				inputField.focus();
-				inputField.selectionStart = startPos + myValue.length;
-				inputField.selectionEnd = startPos + myValue.length;
-				inputField.scrollTop = scrollTop;
-			} else {
-				inputField.focus();
-				inputField.value += myValue;
-			}
-		}
+		
 	</script>
 
 	

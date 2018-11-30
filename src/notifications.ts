@@ -1,5 +1,5 @@
 
-
+// Notifications
 class AlertBadge {
     alertBadgeElement: any;
     alertCount: number;

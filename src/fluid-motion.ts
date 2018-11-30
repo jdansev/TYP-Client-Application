@@ -1,8 +1,4 @@
 
-
-
-
-
 class FluidMotionElement {
 	element: any;
 	easing: string;

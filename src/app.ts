@@ -18,6 +18,8 @@ var notificationAlertBadge: AlertBadge;
 var hubAlertBadge: AlertBadge;
 var peopleAlertBadge: AlertBadge;
 
+var emojiPicker: EmojiPicker;
+
 
 function electronConfig() {
     // set electron zoom
@@ -46,7 +48,7 @@ window.onload = function() {
     menuManager = new MenuManager();
 
     tabManager = new TabManager();
-    tabManager.initialiseTabs();
+    tabManager.createTabs();
     
     colorFade = new ColorFade(
         // spectrum['Endless River'],
@@ -62,7 +64,7 @@ window.onload = function() {
     fluidMotion = new FluidMotion(Direction.Reversed);
 
     goManager = new GoManager();
-    goManager.initialise();
+    goManager.start();
     goManager.register('asdf','asdf');
 
     hubAlertBadge = new AlertBadge($( '#hub-alert-badge' ));
@@ -72,6 +74,10 @@ window.onload = function() {
     peopleAlertBadge.setAlertCount(5);
     peopleAlertBadge.incrementAlertCount();
     notificationAlertBadge.incrementAlertCount();
+
+    emojiPicker = new EmojiPicker($( '.emoji-picker' ), $( '#message-input' ));
+    emojiPicker.createEmojiPicker();
+
 
     /*Dropdown Menu*/
     $('.dropdown').click(function () {
@@ -96,7 +102,6 @@ window.onload = function() {
             console.log($(this).data('Spectrum'));
         });
     }
-
     /*End Dropdown Menu*/
 
 }

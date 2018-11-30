@@ -56,6 +56,7 @@ var GradientFactory = /** @class */ (function () {
         }
         this.colorStops = Math.max(1, this.colorStops - 1);
         for (var x = 0; x < this.colorStops; x++) {
+            // TODO: fix this
             pOffset = parseFloat(x, 10) / this.colorStops;
             for (var y = 0; y < len; y++) {
                 diff[this.colorKeys[y]] = this.endColor[this.colorKeys[y]] - this.beginColor[this.colorKeys[y]];

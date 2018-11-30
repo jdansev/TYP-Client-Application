@@ -1,8 +1,8 @@
 var ipcRenderer = require('electron').ipcRenderer;
-var _a = require('rxjs'), of = _a.of, Observer = _a.Observer, Observable = _a.Observable, Subject = _a.Subject;
+var _a = require('rxjs'), of = _a.of, Observer = _a.Observer, Observable = _a.Observable, Subject = _a.Subject, fromEvent = _a.fromEvent;
 var ajax = require('rxjs/ajax').ajax;
 var webSocket = require('rxjs/webSocket').webSocket;
-var _b = require('rxjs/operators'), pipe = _b.pipe, map = _b.map, mergeMap = _b.mergeMap, tap = _b.tap, retry = _b.retry, filter = _b.filter, share = _b.share, defer = _b.defer;
+var _b = require('rxjs/operators'), pipe = _b.pipe, map = _b.map, mergeMap = _b.mergeMap, tap = _b.tap, retry = _b.retry, filter = _b.filter, share = _b.share, defer = _b.defer, flatMap = _b.flatMap, debounce = _b.debounce, debounceTime = _b.debounceTime, distinctUntilChanged = _b.distinctUntilChanged;
 var WebsocketService = /** @class */ (function () {
     function WebsocketService() {
     }
@@ -14,6 +14,7 @@ var WebsocketService = /** @class */ (function () {
     WebsocketService.prototype.create = function (URL) {
         var _this = this;
         this.ws = new WebSocket(URL);
+        this.ws.onopen = function () { return console.log('connected successfully to ' + URL); };
         var observable = Observable.create(function (obs) {
             _this.ws.onmessage = obs.next.bind(obs);
             _this.ws.onerror = obs.error.bind(obs);
@@ -41,11 +42,13 @@ var WebsocketService = /** @class */ (function () {
 var GoManager = /** @class */ (function () {
     function GoManager() {
     }
-    GoManager.prototype.initialise = function () {
+    GoManager.prototype.start = function () {
         var self = this;
-        // hub search
-        $("#hub-search").keyup(function (e) {
-            if ($('#hub-search').val() == '') {
+        /* Hub search */
+        fromEvent($('#hub-search').get(0), 'keyup')
+            .pipe(map(function (e) { return e.target.value; }))
+            .subscribe(function (x) {
+            if (x == '') {
                 tabManager.resetHubTab();
                 return;
             }
@@ -54,12 +57,14 @@ var GoManager = /** @class */ (function () {
                 self.connectHubSearchWebsocket();
             }
             self.waitForSocketConnection(self.hubSearchWS, function () {
-                self.hubSearchWS.send($('#hub-search').val());
+                self.hubSearchWS.send(x);
             });
         });
-        // user search
-        $("#user-search").keyup(function (e) {
-            if ($('#user-search').val() == '') {
+        /* User search */
+        fromEvent($('#user-search').get(0), 'keyup')
+            .pipe(map(function (e) { return e.target.value; }))
+            .subscribe(function (x) {
+            if (x == '') {
                 tabManager.resetFriendsTab();
                 return;
             }
@@ -68,7 +73,7 @@ var GoManager = /** @class */ (function () {
                 self.connectUserSearchWebsocket();
             }
             self.waitForSocketConnection(self.userSearchWS, function () {
-                self.userSearchWS.send($('#user-search').val());
+                self.userSearchWS.send(x);
             });
         });
     };

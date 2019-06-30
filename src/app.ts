@@ -3,6 +3,7 @@
 var my_id;
 var my_token;
 
+var hubManager: HubManager;
 
 var tabManager: TabManager;
 var menuManager: MenuManager;
@@ -47,6 +48,8 @@ window.onload = function() {
     messageUIManager = new MessageUIManager();
     menuManager = new MenuManager();
 
+    hubManager = new HubManager();
+
     tabManager = new TabManager();
     tabManager.createTabs();
     
@@ -65,15 +68,11 @@ window.onload = function() {
 
     goManager = new GoManager();
     goManager.start();
-    goManager.register('asdf','asdf');
+    goManager.register('Derek Smith','derek');
 
     hubAlertBadge = new AlertBadge($( '#hub-alert-badge' ));
     peopleAlertBadge = new AlertBadge($( '#people-alert-badge' ))
     notificationAlertBadge = new AlertBadge($( '#notification-alert-badge' ));
-    hubAlertBadge.incrementAlertCount();
-    peopleAlertBadge.setAlertCount(5);
-    peopleAlertBadge.incrementAlertCount();
-    notificationAlertBadge.incrementAlertCount();
 
     emojiPicker = new EmojiPicker($( '.emoji-picker' ), $( '#message-input' ));
     emojiPicker.createEmojiPicker();

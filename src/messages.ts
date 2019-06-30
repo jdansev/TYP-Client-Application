@@ -1,5 +1,32 @@
 
 
+
+
+class HubManager {
+    hubs: Array<UserHub>;
+
+    constructor() { this.hubs = new Array<UserHub>(); }
+    public appendHub(hub: UserHub) { this.hubs.push(hub); }
+    public size() { return this.hubs.length; }
+    public getAllHubs() { return this.hubs; }
+    public clearHubs() { this.hubs = []; }
+
+    public unreadCount() {
+        return this.hubs.filter(h => h.readLatest == false).length;
+    }
+}
+
+class MessageManager {
+    messages: Array<Message>;
+
+    constructor() { this.messages = new Array<Message>(); }
+    public addMessage(message: Message) { this.messages.push(message); }
+    public size() { return this.messages.length; }
+    public getAllMessages() { return this.messages; }
+    public clearMessages() { this.messages = []; }
+}
+
+
 class MessageUIManager {
     message_input: any;
     send_inner: any;
@@ -83,16 +110,6 @@ class MessageUIManager {
         
     }
 
-}
-
-class MessageManager {
-    messages: Array<Message>;
-
-    constructor() { this.messages = new Array<Message>(); }
-    public addMessage(message: Message) { this.messages.push(message); }
-    public size() { return this.messages.length; }
-    public getAllMessages() { return this.messages; }
-    public clearMessages() { this.messages = []; }
 }
 
 class MessageHandler {

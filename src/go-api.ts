@@ -233,7 +233,7 @@ class GoManager {
         .subscribe(
             msg => messageHandler.send(msg)
         );
-        self.loadHubMessages(hub_id)
+        self.loadHubMessages(hub_id);
     }
 
     private waitForSocketConnection(socket, callback){
@@ -361,12 +361,14 @@ class GoManager {
                 this.notify(n);
                 self.loadHubs();
                 //TODO: only increment if hub tab isn't already opened
-                hubAlertBadge.incrementAlertCount();
+                // hubAlertBadge.incrementAlertCount();
             }
         );
     }
 
     public loadHubs() {
+
+        hubManager.clearHubs();
 
         ajax({
             method: 'GET',
@@ -379,8 +381,16 @@ class GoManager {
             map(h => decodeUserHub(h))
         )
         .subscribe(
-            hub => tabManager.addItemToHubList(hub),
-            err => console.log(err)
+            hub => {
+                hubManager.appendHub(hub);
+            },
+            err => console.log(err),
+            () => {
+                for (var hub of hubManager.getAllHubs()) {
+                    tabManager.addItemToHubList(hub);
+                }
+                hubAlertBadge.setAlertCount(hubManager.unreadCount());
+            }
         );
 
     }

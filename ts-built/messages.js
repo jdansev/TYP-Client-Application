@@ -1,3 +1,26 @@
+var HubManager = /** @class */ (function () {
+    function HubManager() {
+        this.hubs = new Array();
+    }
+    HubManager.prototype.appendHub = function (hub) { this.hubs.push(hub); };
+    HubManager.prototype.size = function () { return this.hubs.length; };
+    HubManager.prototype.getAllHubs = function () { return this.hubs; };
+    HubManager.prototype.clearHubs = function () { this.hubs = []; };
+    HubManager.prototype.unreadCount = function () {
+        return this.hubs.filter(function (h) { return h.readLatest == false; }).length;
+    };
+    return HubManager;
+}());
+var MessageManager = /** @class */ (function () {
+    function MessageManager() {
+        this.messages = new Array();
+    }
+    MessageManager.prototype.addMessage = function (message) { this.messages.push(message); };
+    MessageManager.prototype.size = function () { return this.messages.length; };
+    MessageManager.prototype.getAllMessages = function () { return this.messages; };
+    MessageManager.prototype.clearMessages = function () { this.messages = []; };
+    return MessageManager;
+}());
 var MessageUIManager = /** @class */ (function () {
     function MessageUIManager() {
         var self = this;
@@ -61,16 +84,6 @@ var MessageUIManager = /** @class */ (function () {
         });
     };
     return MessageUIManager;
-}());
-var MessageManager = /** @class */ (function () {
-    function MessageManager() {
-        this.messages = new Array();
-    }
-    MessageManager.prototype.addMessage = function (message) { this.messages.push(message); };
-    MessageManager.prototype.size = function () { return this.messages.length; };
-    MessageManager.prototype.getAllMessages = function () { return this.messages; };
-    MessageManager.prototype.clearMessages = function () { this.messages = []; };
-    return MessageManager;
 }());
 var MessageHandler = /** @class */ (function () {
     function MessageHandler() {

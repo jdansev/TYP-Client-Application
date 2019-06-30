@@ -257,16 +257,25 @@ var GoManager = /** @class */ (function () {
             _this.notify(n);
             self.loadHubs();
             //TODO: only increment if hub tab isn't already opened
-            hubAlertBadge.incrementAlertCount();
+            // hubAlertBadge.incrementAlertCount();
         });
     };
     GoManager.prototype.loadHubs = function () {
+        hubManager.clearHubs();
         ajax({
             method: 'GET',
             url: 'http://localhost:1212/my-hubs?token=' + my_token
         })
             .pipe(map(function (r) { return r.response; }), tap(function (x) { return tabManager.emptyHubList(); }), mergeMap(function (s) { return s.slice(); }), map(function (h) { return decodeUserHub(h); }))
-            .subscribe(function (hub) { return tabManager.addItemToHubList(hub); }, function (err) { return console.log(err); });
+            .subscribe(function (hub) {
+            hubManager.appendHub(hub);
+        }, function (err) { return console.log(err); }, function () {
+            for (var _i = 0, _a = hubManager.getAllHubs(); _i < _a.length; _i++) {
+                var hub = _a[_i];
+                tabManager.addItemToHubList(hub);
+            }
+            hubAlertBadge.setAlertCount(hubManager.unreadCount());
+        });
     };
     GoManager.prototype.getHubInfo = function (hid) {
         ajax({
